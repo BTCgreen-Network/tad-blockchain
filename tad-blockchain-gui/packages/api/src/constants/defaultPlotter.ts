@@ -4,7 +4,7 @@ import defaultsForPlotter from '../utils/defaultsForPlotter';
 
 export default {
   displayName: 'Tad Proof of Space',
-  options: optionsForPlotter(PlotterName.TADPOS),
-  defaults: defaultsForPlotter(PlotterName.TADPOS),
+  options: optionsForPlotter(PlotterName.CHIAPOS),
+  defaults: defaultsForPlotter(PlotterName.CHIAPOS),
   installInfo: { installed: true },
 };

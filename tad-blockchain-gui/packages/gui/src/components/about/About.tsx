@@ -71,7 +71,7 @@ const Spacer = styled.div`
   margin-bottom: 1rem;
 `;
 
-const url = 'https://tadnetwork.org';
+const url = 'https://tadcoins.com';
 
 type Props = {
   version: string;

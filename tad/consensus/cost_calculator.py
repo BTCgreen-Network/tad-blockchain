@@ -1,15 +1,15 @@
 from dataclasses import dataclass
-from typing import List, Optional
+from typing import Optional
 
-from tad.types.name_puzzle_condition import NPC
+from tad.types.spend_bundle_conditions import SpendBundleConditions
 from tad.util.ints import uint16, uint64
 from tad.util.streamable import Streamable, streamable
 
 
-@dataclass(frozen=True)
 @streamable
+@dataclass(frozen=True)
 class NPCResult(Streamable):
     error: Optional[uint16]
-    npc_list: List[NPC]
+    conds: Optional[SpendBundleConditions]
     cost: uint64  # The total cost of the block, including CLVM cost, cost of
     # conditions and cost of bytes

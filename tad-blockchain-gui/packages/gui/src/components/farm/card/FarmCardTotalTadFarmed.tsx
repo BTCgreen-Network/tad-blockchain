@@ -1,10 +1,11 @@
 import React, { useMemo } from 'react';
 import { Trans } from '@lingui/macro';
-import { useCurrencyCode, mojoToTadLocaleString, CardSimple } from '@tad/core';
+import { useCurrencyCode, mojoToTadLocaleString, CardSimple, useLocale } from '@tad/core';
 import { useGetFarmedAmountQuery } from '@tad/api-react';
 
 export default function FarmCardTotalTadFarmed() {
   const currencyCode = useCurrencyCode();
+  const [locale] = useLocale();
   const { data, isLoading, error } = useGetFarmedAmountQuery();
 
   const farmedAmount = data?.farmedAmount;
@@ -13,13 +14,13 @@ export default function FarmCardTotalTadFarmed() {
     if (farmedAmount !== undefined) {
       return (
         <>
-          {mojoToTadLocaleString(farmedAmount)}
+          {mojoToTadLocaleString(farmedAmount, locale)}
           &nbsp;
           {currencyCode}
         </>
       );
     }
-  }, [farmedAmount]);
+  }, [farmedAmount, locale, currencyCode]);
 
   return (
     <CardSimple

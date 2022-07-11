@@ -8,8 +8,8 @@ from tad.util.ints import uint32, uint64
 from tad.util.streamable import Streamable, streamable
 
 
-@dataclass(frozen=True)
 @streamable
+@dataclass(frozen=True)
 class CoinRecord(Streamable):
     """
     These are values that correspond to a CoinName that are used

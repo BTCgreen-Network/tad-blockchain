@@ -1,5 +1,5 @@
+import { WalletType } from '@tad/api';
 import type Transaction from './Transaction';
-import type WalletType from '../constants/WalletType';
 import WalletBalance from './WalletBalance';
 
 interface Wallet {

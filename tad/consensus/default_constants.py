@@ -19,7 +19,7 @@ testnet_kwargs = {
     "SIGNIFICANT_BITS": 8,  # The number of bits to look at in difficulty and min iters. The rest are zeroed
     "DISCRIMINANT_SIZE_BITS": 1024,  # Max is 1024 (based on ClassGroupElement int size)
     "NUMBER_ZERO_BITS_PLOT_FILTER": 9,  # H(plot signature of the challenge) must start with these many zeroes
-    "MIN_PLOT_SIZE": 32,  # 32 for mainnet
+    "MIN_PLOT_SIZE": 28,  # 32 for mainnet
     "MAX_PLOT_SIZE": 50,
     "SUB_SLOT_TIME_TARGET": 600,  # The target number of seconds per slot, mainnet 600
     "NUM_SP_INTERVALS_EXTRA": 3,  # The number of sp intervals to add to the signage point
@@ -38,8 +38,8 @@ testnet_kwargs = {
         "3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af"
     ),
     "MAX_VDF_WITNESS_SIZE": 64,
-    # Size of mempool = 50x the size of block # temporary change until #9125 gets in
-    "MEMPOOL_BLOCK_BUFFER": 10,
+    # Size of mempool = 50x the size of block
+    "MEMPOOL_BLOCK_BUFFER": 50,
     # Max coin amount, fits into 64 bits
     "MAX_COIN_AMOUNT": uint64((1 << 64) - 1),
     # Max block cost in clvm cost units
@@ -54,6 +54,7 @@ testnet_kwargs = {
     "MAX_GENERATOR_SIZE": 1000000,
     "MAX_GENERATOR_REF_LIST_SIZE": 512,  # Number of references allowed in the block generator ref list
     "POOL_SUB_SLOT_ITERS": 37600000000,  # iters limit * NUM_SPS
+    "SOFT_FORK_HEIGHT": 2300000,
 }
 
 

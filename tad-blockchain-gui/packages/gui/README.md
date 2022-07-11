@@ -1,5 +1,5 @@
 # tad-blockchain
-![Alt text](https://www.tadnetwork.org/img/tad_logo.svg)
+![Alt text](https://www.tadcoins.com/img/tad_logo.svg)
 
 ![GitHub contributors](https://img.shields.io/github/contributors/Tad-Network/tad-blockchain?logo=GitHub)
 

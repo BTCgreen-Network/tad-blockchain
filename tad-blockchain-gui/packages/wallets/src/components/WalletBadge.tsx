@@ -2,7 +2,7 @@ import React from 'react';
 import { Trans } from '@lingui/macro';
 import { Tooltip } from '@tad/core';
 import { useGetCatListQuery } from '@tad/api-react';
-import { VerifiedUser as VerifiedUserIcon, VerifiedUserProps } from '@material-ui/icons';
+import { VerifiedUser as VerifiedUserIcon, VerifiedUserProps } from '@mui/icons-material';
 import styled from 'styled-components';
 import type { Wallet } from '@tad/api';
 import { WalletType } from '@tad/api';
