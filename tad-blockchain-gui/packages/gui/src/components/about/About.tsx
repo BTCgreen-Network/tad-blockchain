@@ -147,7 +147,7 @@ export default function About(props: Props) {
         </VersionsTable>
 
         <BugReport
-          href="https://github.com/Tad-Network/tad-blockchain/issues"
+          href="https://github.com/BTCgreen-Network/tad-blockchain/issues"
           target="_blank"
         >
           Report an issue

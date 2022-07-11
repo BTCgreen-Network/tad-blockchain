@@ -145,8 +145,8 @@ kwargs = dict(
     long_description_content_type="text/markdown",
     zip_safe=False,
     project_urls={
-        "Source": "https://github.com/Tad-Network/tad-blockchain/",
-        "Changelog": "https://github.com/Tad-Network/tad-blockchain/blob/main/CHANGELOG.md",
+        "Source": "https://github.com/BTCgreen-Network/tad-blockchain/",
+        "Changelog": "https://github.com/BTCgreen-Network/tad-blockchain/blob/main/CHANGELOG.md",
     },
 )
 

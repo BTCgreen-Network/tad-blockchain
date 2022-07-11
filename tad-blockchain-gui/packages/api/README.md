@@ -2,7 +2,7 @@
 
 ![Alt text](https://www.tadcoins.com/img/tad_logo.svg)
 
-This library provides support for TypeScript/JavaScript [Tad](https://www.tadcoins.com) apps to access the [Tad Blockchain RPC](https://github.com/Tad-Network/tad-blockchain/wiki/RPC-Interfaces), by making it easier to perform the following actions:
+This library provides support for TypeScript/JavaScript [Tad](https://www.tadcoins.com) apps to access the [Tad Blockchain RPC](https://github.com/BTCgreen-Network/tad-blockchain/wiki/RPC-Interfaces), by making it easier to perform the following actions:
 
 - Making requests to the Tad Blockchain RPC.
 - Catch responses and errors with standard try/catch and async/await syntax.

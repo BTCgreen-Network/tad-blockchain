@@ -14,7 +14,7 @@ More details - see [reddit post](https://www.reddit.com/r/TadCoin/comments/thk2c
 
 
 We've reached mainnet and GUI apps are available for download! 
-## :arrow_right::arrow_right: [Download TadCoin here](https://github.com/Tad-Network/tad-blockchain/releases) :arrow_left::arrow_left:
+## :arrow_right::arrow_right: [Download TadCoin here](https://github.com/BTCgreen-Network/tad-blockchain/releases) :arrow_left::arrow_left:
 
 Have questions, suggestions or just want to show off your TadCoins? [Join our Discord](https://discord.gg/mwZF9DX544)
 
@@ -36,7 +36,7 @@ There are thousands of users and dozens projects are working with TadCoin. Some 
 
 ## Installation
 
-Download Tad Builds for Windows, Linux and MacOS [from releases page]([Download TadCoin here](https://github.com/Tad-Network/tad-blockchain/releases))
+Download Tad Builds for Windows, Linux and MacOS [from releases page]([Download TadCoin here](https://github.com/BTCgreen-Network/tad-blockchain/releases))
 
 ### Command Line Installation
 
@@ -50,7 +50,7 @@ sudo apt-get upgrade -y
 sudo apt install git -y
 
 # Checkout the source and install
-git clone https://github.com/Tad-Network/tad-blockchain
+git clone https://github.com/BTCgreen-Network/tad-blockchain
 cd tad-blockchain
 
 sh install.sh

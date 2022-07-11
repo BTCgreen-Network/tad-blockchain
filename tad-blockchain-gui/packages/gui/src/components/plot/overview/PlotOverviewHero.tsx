@@ -35,7 +35,7 @@ export default function PlotOverviewHero() {
               &nbsp;
               <Link
                 target="_blank"
-                href="https://github.com/Tad-Network/tad-blockchain/wiki/Network-Architecture"
+                href="https://github.com/BTCgreen-Network/tad-blockchain/wiki/Network-Architecture"
               >
                 Learn more
               </Link>

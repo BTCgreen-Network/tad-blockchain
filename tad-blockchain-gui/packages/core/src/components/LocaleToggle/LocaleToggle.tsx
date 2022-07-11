@@ -36,7 +36,7 @@ export default function LocaleToggle(props) {
     handleClose();
 
     openExternal(
-      'https://github.com/Tad-Network/tad-blockchain-gui/tree/main/src/locales/README.md',
+      'https://github.com/BTCgreen-Network/tad-blockchain-gui/tree/main/src/locales/README.md',
     );
   }
 

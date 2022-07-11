@@ -79,7 +79,7 @@ export default function PlotAddChooseSize(props: Props) {
           }
           <Link
             target="_blank"
-            href="https://github.com/Tad-Network/tad-blockchain/wiki/k-sizes"
+            href="https://github.com/BTCgreen-Network/tad-blockchain/wiki/k-sizes"
           >
             Learn more
           </Link>
