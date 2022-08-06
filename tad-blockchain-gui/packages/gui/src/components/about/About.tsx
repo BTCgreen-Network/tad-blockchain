@@ -71,7 +71,7 @@ const Spacer = styled.div`
   margin-bottom: 1rem;
 `;
 
-const url = 'https://tadcoins.com';
+const url = 'https://tad.net';
 
 type Props = {
   version: string;
@@ -147,7 +147,7 @@ export default function About(props: Props) {
         </VersionsTable>
 
         <BugReport
-          href="https://github.com/BTCgreen-Network/tad-blockchain/issues"
+          href="https://github.com/Tad-Network/tad-blockchain/issues"
           target="_blank"
         >
           Report an issue

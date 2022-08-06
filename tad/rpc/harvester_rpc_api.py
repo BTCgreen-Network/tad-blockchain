@@ -1,7 +1,6 @@
-from typing import Any, Dict, List
+from typing import Any, Callable, Dict, List
 
 from tad.harvester.harvester import Harvester
-from tad.rpc.rpc_server import Endpoint
 from tad.util.ws_message import WsRpcMessage, create_payload_dict
 
 
@@ -10,7 +9,7 @@ class HarvesterRpcApi:
         self.service = harvester
         self.service_name = "tad_harvester"
 
-    def get_routes(self) -> Dict[str, Endpoint]:
+    def get_routes(self) -> Dict[str, Callable]:
         return {
             "/get_plots": self.get_plots,
             "/refresh_plots": self.refresh_plots,

@@ -40,7 +40,7 @@ export default function SettingsApp(props: SettingsAppProps) {
   async function handleOpenFAQURL(): Promise<void> {
     try {
       const shell: Shell = (window as any).shell;
-      await shell.openExternal('https://github.com/BTCgreen-Network/tad-blockchain/wiki/FAQ');
+      await shell.openExternal('https://github.com/Tad-Network/tad-blockchain/wiki/FAQ');
     } catch (error: any) {
       showError(error);
     }
@@ -49,7 +49,7 @@ export default function SettingsApp(props: SettingsAppProps) {
   async function handleOpenSendFeedbackURL(): Promise<void> {
     try {
       const shell: Shell = (window as any).shell;
-      await shell.openExternal('https://feedback.tadcoins.com/lightwallet');
+      await shell.openExternal('https://feedback.tad.net/lightwallet');
     } catch (error: any) {
       showError(error);
     }

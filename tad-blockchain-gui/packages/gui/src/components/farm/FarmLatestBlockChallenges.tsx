@@ -63,19 +63,6 @@ export default function FarmLatestBlockChallenges() {
         }
         pages
       />
-      <Typography variant="caption">
-        <Trans>
-          *Want to explore Tad’s blocks further? Check out{' '}
-          <Link
-            color="primary"
-            href="https://www.tadexplorer.com/"
-            target="_blank"
-          >
-            Tad Explorer
-          </Link>{' '}
-          built by an open source developer.
-        </Trans>
-      </Typography>
     </Card>
   );
 }

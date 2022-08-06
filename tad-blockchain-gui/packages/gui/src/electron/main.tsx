@@ -533,7 +533,7 @@ if (!handleSquirrelEvent()) {
             label: i18n._(/* i18n */ { id: 'Tad Blockchain Wiki' }),
             click: () => {
               openExternal(
-                'https://github.com/BTCgreen-Network/tad-blockchain/wiki',
+                'https://github.com/Tad-Network/tad-blockchain/wiki',
               );
             },
           },
@@ -541,7 +541,7 @@ if (!handleSquirrelEvent()) {
             label: i18n._(/* i18n */ { id: 'Frequently Asked Questions' }),
             click: () => {
               openExternal(
-                'https://github.com/BTCgreen-Network/tad-blockchain/wiki/FAQ',
+                'https://github.com/Tad-Network/tad-blockchain/wiki/FAQ',
               );
             },
           },
@@ -549,7 +549,7 @@ if (!handleSquirrelEvent()) {
             label: i18n._(/* i18n */ { id: 'Release Notes' }),
             click: () => {
               openExternal(
-                'https://github.com/BTCgreen-Network/tad-blockchain/releases',
+                'https://github.com/Tad-Network/tad-blockchain/releases',
               );
             },
           },
@@ -557,7 +557,7 @@ if (!handleSquirrelEvent()) {
             label: i18n._(/* i18n */ { id: 'Contribute on GitHub' }),
             click: () => {
               openExternal(
-                'https://github.com/BTCgreen-Network/tad-blockchain/blob/main/CONTRIBUTING.md',
+                'https://github.com/Tad-Network/tad-blockchain/blob/main/CONTRIBUTING.md',
               );
             },
           },
@@ -568,7 +568,7 @@ if (!handleSquirrelEvent()) {
             label: i18n._(/* i18n */ { id: 'Report an Issue...' }),
             click: () => {
               openExternal(
-                'https://github.com/BTCgreen-Network/tad-blockchain/issues',
+                'https://github.com/Tad-Network/tad-blockchain/issues',
               );
             },
           },

@@ -1,8 +1,6 @@
 [submodule "tad-blockchain-gui"]
 	path = tad-blockchain-gui
-	url = https://github.com/BTCgreen-Network/tad-blockchain-gui.git
-	branch = pools
+	url = https://github.com/TadNetwork/tad-blockchain-gui.git
 [submodule "mozilla-ca"]
 	path = mozilla-ca
 	url = https://github.com/Chia-Network/mozilla-ca.git
-        branch = main

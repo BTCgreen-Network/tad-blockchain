@@ -14,3 +14,4 @@ export { default as mojoToTad } from './mojoToTad';
 export { default as mojoToTadLocaleString } from './mojoToTadLocaleString';
 export { default as sleep } from './sleep';
 export { default as useColorModeValue } from './useColorModeValue';
+export { default as validAddress } from './validAddress';

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Trans } from '@lingui/macro';
-import { Flex, useColorModeValue } from '@tad/core';
+import { Flex, Link, useColorModeValue } from '@tad/core';
 import { Typography } from '@mui/material';
 import styled from 'styled-components';
 
@@ -43,7 +43,15 @@ export default function OfferHeader(props: OfferHeaderProps) {
   if (!headerElement && isInvalid) {
     headerElement = (
       <Typography variant="subtitle1" color="error">
-        <Trans>This offer is no longer valid</Trans>
+        <Trans>
+          {'This offer is no longer valid. To understand why, click '}
+          <Link
+            target="_blank"
+            href="https://tadlisp.com/docs/tutorials/offers_gui_tutorial/#taker-attempts-to-accept-an-invalid-offer"
+          >
+            here
+          </Link> to learn more.
+        </Trans>
       </Typography>
     );
   }
