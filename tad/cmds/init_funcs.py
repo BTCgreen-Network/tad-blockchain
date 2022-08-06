@@ -36,6 +36,7 @@ from tad.util.ssl_check import (
     check_and_fix_permissions_for_ssl_file,
     fix_ssl,
 )
+from tad.wallet.derive_chives_keys import master_sk_to_chives_pool_sk
 from tad.wallet.derive_keys import (
     master_sk_to_pool_sk,
     master_sk_to_wallet_sk_intermediate,
@@ -80,6 +81,7 @@ def check_keys(new_root: Path, keychain: Optional[Keychain] = None) -> None:
 
     with lock_and_load_config(new_root, "config.yaml") as config:
         pool_child_pubkeys = [master_sk_to_pool_sk(sk).get_g1() for sk, _ in all_sks]
+        pool_child_pubkeys = pool_child_pubkeys + [master_sk_to_chives_pool_sk(sk).get_g1() for sk, _ in all_sks]
         all_targets = []
         stop_searching_for_farmer = "tad_target_address" not in config["farmer"]
         stop_searching_for_pool = "tad_target_address" not in config["pool"]
