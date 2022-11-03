@@ -1,6 +1,5 @@
 import os
 import shutil
-import wget
 import sqlite3
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
@@ -27,7 +26,7 @@ from tad.util.config import (
 )
 from tad.util.db_version import set_db_version
 from tad.util.keychain import Keychain
-from tad.util.path import mkdir, path_from_root
+from tad.util.path import path_from_root
 from tad.util.ssl_check import (
     DEFAULT_PERMISSIONS_CERT_FILE,
     DEFAULT_PERMISSIONS_KEY_FILE,
@@ -46,8 +45,17 @@ from tad.wallet.derive_keys import (
 )
 from tad.cmds.configure import configure
 
-private_node_names: List[str] = ["full_node", "wallet", "farmer", "harvester", "timelord", "crawler", "daemon"]
-public_node_names: List[str] = ["full_node", "wallet", "farmer", "introducer", "timelord"]
+_all_private_node_names: List[str] = [
+    "full_node",
+    "wallet",
+    "farmer",
+    "harvester",
+    "timelord",
+    "crawler",
+    "data_layer",
+    "daemon",
+]
+_all_public_node_names: List[str] = ["full_node", "wallet", "farmer", "introducer", "timelord", "data_layer"]
 
 
 def dict_add_new_default(updated: Dict, default: Dict, do_not_migrate_keys: Dict[str, Any]):
@@ -168,7 +176,7 @@ def check_keys(new_root: Path, keychain: Optional[Keychain] = None) -> None:
 def copy_files_rec(old_path: Path, new_path: Path):
     if old_path.is_file():
         print(f"{new_path}")
-        mkdir(new_path.parent)
+        new_path.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy(old_path, new_path)
     elif old_path.is_dir():
         for old_path_child in old_path.iterdir():
@@ -219,6 +227,9 @@ def create_all_ssl(
     *,
     private_ca_crt_and_key: Optional[Tuple[bytes, bytes]] = None,
     node_certs_and_keys: Optional[Dict[str, Dict]] = None,
+    private_node_names: List[str] = _all_private_node_names,
+    public_node_names: List[str] = _all_public_node_names,
+    overwrite: bool = True,
 ):
     # remove old key and crt
     config_dir = root_path / "config"
@@ -240,7 +251,7 @@ def create_all_ssl(
     tad_ca_crt, tad_ca_key = get_tad_ca_crt_key()
     tad_ca_crt_path = ca_dir / "tad_ca.crt"
     tad_ca_key_path = ca_dir / "tad_ca.key"
-    write_ssl_cert_and_key(tad_ca_crt_path, tad_ca_crt, tad_ca_key_path, tad_ca_key)
+    write_ssl_cert_and_key(tad_ca_crt_path, tad_ca_crt, tad_ca_key_path, tad_ca_key, overwrite=overwrite)
 
     # If Private CA crt/key are passed-in, write them out
     if private_ca_crt_and_key is not None:
@@ -255,7 +266,13 @@ def create_all_ssl(
         ca_key = private_ca_key_path.read_bytes()
         ca_crt = private_ca_crt_path.read_bytes()
         generate_ssl_for_nodes(
-            ssl_dir, ca_crt, ca_key, prefix="private", nodes=private_node_names, node_certs_and_keys=node_certs_and_keys
+            ssl_dir,
+            ca_crt,
+            ca_key,
+            prefix="private",
+            nodes=private_node_names,
+            node_certs_and_keys=node_certs_and_keys,
+            overwrite=overwrite,
         )
     else:
         # This is entered when user copied over private CA
@@ -263,7 +280,13 @@ def create_all_ssl(
         ca_key = private_ca_key_path.read_bytes()
         ca_crt = private_ca_crt_path.read_bytes()
         generate_ssl_for_nodes(
-            ssl_dir, ca_crt, ca_key, prefix="private", nodes=private_node_names, node_certs_and_keys=node_certs_and_keys
+            ssl_dir,
+            ca_crt,
+            ca_key,
+            prefix="private",
+            nodes=private_node_names,
+            node_certs_and_keys=node_certs_and_keys,
+            overwrite=overwrite,
         )
 
     tad_ca_crt, tad_ca_key = get_tad_ca_crt_key()
@@ -406,12 +429,6 @@ def tad_version_number() -> Tuple[str, str, str, str]:
     return major_release_number, minor_release_number, patch_release_number, dev_release_number
 
 
-def tad_minor_release_number():
-    res = int(tad_version_number()[2])
-    print(f"Install release number: {res}")
-    return res
-
-
 def tad_full_version_str() -> str:
     major, minor, patch, dev = tad_version_number()
     return f"{major}.{minor}.{patch}{dev}"
@@ -502,7 +519,7 @@ def tad_init(
             db_path_replaced = new_db_path.replace("CHALLENGE", config["selected_network"])
             db_path = path_from_root(root_path, db_path_replaced)
 
-            mkdir(db_path.parent)
+            db_path.parent.mkdir(parents=True, exist_ok=True)
             with sqlite3.connect(db_path) as connection:
                 set_db_version(connection, 1)
 
@@ -512,16 +529,16 @@ def tad_init(
         config = load_config(root_path, "config.yaml")["full_node"]
         db_path_replaced = config["database_path"].replace("CHALLENGE", config["selected_network"])
         db_path = path_from_root(root_path, db_path_replaced)
-        mkdir(db_path.parent)
-
-        with sqlite3.connect(db_path) as connection:
-            set_db_version(connection, 2)
+        db_path.parent.mkdir(parents=True, exist_ok=True)
+        try:
+            # create new v2 db file
+            with sqlite3.connect(db_path) as connection:
+                set_db_version(connection, 2)
+        except sqlite3.OperationalError:
+            # db already exists, so we're good
+            pass
 
     print("")
     print("To see your keys, run 'tad keys show --show-mnemonic-seed'")
-
-    url = 'https://raw.githubusercontent.com/BTCgreen-Network/tad-blockchain/main/peer_table_node.sqlite'
-    mkdir(root_path / "db")
-    wget.download(url, out=str(root_path / "db"))
 
     return 0

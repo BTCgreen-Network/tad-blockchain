@@ -6,10 +6,10 @@ import { get } from 'lodash';
 import sleep from './sleep';
 import untildify from './untildify';
 
-function getConfigRootDir(net = 'mainnet'): string {
+export function getConfigRootDir(net = 'mainnet'): string {
   const homedir = os.homedir();
 
-  return 'TAD_ROOT' in process.env 
+  return 'TAD_ROOT' in process.env
     ? untildify(process.env.TAD_ROOT)
     : path.join(homedir, '.tad', net);
 }
@@ -31,7 +31,7 @@ export default async function loadConfig(net?: string): Promise<{
     const config = readConfigFile(net);
 
     const selfHostname = get(config, 'ui.daemon_host', 'localhost');
-    const daemonPort = get(config, 'ui.daemon_port', 55400);
+    const daemonPort = get(config, 'ui.daemon_port', 4400);
 
     // store these in the global object so they can be used by both main and renderer processes
     const url = `wss://${selfHostname}:${daemonPort}`;

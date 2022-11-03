@@ -7,7 +7,7 @@ from tad.types.blockchain_format.program import Program
 from tad.types.blockchain_format.sized_bytes import bytes32
 from tad.types.condition_opcodes import ConditionOpcode
 from tad.util.ints import uint64
-from tad.wallet.tadlisp import sexp
+from tad.wallet.chialisp import sexp
 from tad.wallet.puzzles.load_clvm import load_clvm
 
 RATE_LIMITED_MODE = 1
@@ -27,7 +27,7 @@ def rl_puzzle_for_pk(
     (1 my_parent_id, my_puzzlehash, my_amount, outgoing_puzzle_hash, outgoing_amount,
      min_block_time, parent_parent_id, parent_amount, fee)
     RATE LIMIT LOGIC:
-    M - tad_per_interval
+    M - chia_per_interval
     N - interval_blocks
     V - amount being spent
     MIN_BLOCK_AGE = V / (M / N)

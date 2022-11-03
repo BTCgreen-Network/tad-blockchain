@@ -44,7 +44,7 @@ if ($null -eq (Get-Command py -ErrorAction SilentlyContinue))
 }
 
 $supportedPythonVersions = "3.10", "3.9", "3.8", "3.7"
-if (Test-Path env:INSTALL_PYTHON_VERSION)
+if ("$env:INSTALL_PYTHON_VERSION" -ne "")
 {
     $pythonVersion = $env:INSTALL_PYTHON_VERSION
 }
@@ -108,11 +108,11 @@ venv\scripts\pip install --editable ".$extras_cli" --extra-index-url https://pyp
 
 Write-Output ""
 Write-Output "Tad blockchain .\Install.ps1 complete."
-Write-Output "For assistance join us on Keybase in the #support chat channel:"
-Write-Output "https://keybase.io/team/tad_network.public"
+Write-Output "For assistance join us on Discord in the #support chat channel:"
+Write-Output "https://discord.gg/2WHH7yGaT9"
 Write-Output ""
 Write-Output "Try the Quick Start Guide to running tad-blockchain:"
-Write-Output "https://github.com/TadNetwork/tad-blockchain/wiki/Quick-Start-Guide"
+Write-Output "https://github.com/Tad-Network/tad-blockchain/wiki/Quick-Start-Guide"
 Write-Output ""
 Write-Output "To install the GUI type '.\Install-gui.ps1' after '.\venv\scripts\Activate.ps1'."
 Write-Output ""

@@ -29,9 +29,9 @@ def get_madmax_package_path() -> Path:
 
 def get_madmax_executable_path_for_ksize(plotters_root_path: Path, ksize: int = 32) -> Path:
     madmax_dir: Path = get_madmax_package_path()
-    madmax_exec: str = "tad_plot"
+    madmax_exec: str = "chia_plot"
     if ksize > 32:
-        madmax_exec += "_k34"  # Use the tad_plot_k34 executable for k-sizes > 32
+        madmax_exec += "_k34"  # Use the chia_plot_k34 executable for k-sizes > 32
     if sys.platform in ["win32", "cygwin"]:
         madmax_exec += ".exe"
     if not madmax_dir.exists():
@@ -120,7 +120,7 @@ def install_madmax(plotters_root_path: Path):
             [
                 "git",
                 "clone",
-                "https://github.com/TadNetwork/tad-plotter-madmax.git",
+                "https://github.com/Chia-Network/chia-plotter-madmax.git",
                 MADMAX_PLOTTER_DIR,
             ],
             "Could not clone madmax git repository",
@@ -175,7 +175,7 @@ def dir_with_trailing_slash(dir: str) -> str:
 
 
 def plot_madmax(args, tad_root_path: Path, plotters_root_path: Path):
-    if sys.platform not in ["win32", "cygwin"]:
+    if sys.platform != "win32" and sys.platform != "cygwin":
         import resource
 
         # madMAx has a ulimit -n requirement > 296:
@@ -236,7 +236,7 @@ def plot_madmax(args, tad_root_path: Path, plotters_root_path: Path):
         call_args.append("-k")
         call_args.append(str(args.size))
     try:
-        asyncio.run(run_plotter(call_args, progress))
+        asyncio.run(run_plotter(tad_root_path, args.plotter, call_args, progress))
     except Exception as e:
         print(f"Exception while plotting: {type(e)} {e}")
         print(f"Traceback: {traceback.format_exc()}")

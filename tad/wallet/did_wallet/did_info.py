@@ -8,8 +8,6 @@ from tad.wallet.lineage_proof import LineageProof
 from tad.types.blockchain_format.program import Program
 from tad.types.blockchain_format.coin import Coin
 
-DID_HRP = "did:tad:"
-
 
 @streamable
 @dataclass(frozen=True)

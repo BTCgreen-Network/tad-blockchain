@@ -1,16 +1,17 @@
-name: Build Installer - Windows 10
+name: 📦🚀 Build Installer - Windows 10
 
 on:
+  workflow_dispatch:
   push:
-    branches:
-      - 'long_lived/**'
-      - main
-      - 'release/**'
+    # branches:
+    #   - 'long_lived/**'
+    #   - main
+    #   - 'release/**'
     tags:
         - '**'
-  pull_request:
-    branches:
-      - '**'
+  # pull_request:
+  #   branches:
+  #     - '**'
 
 concurrency:
   # SHA is added to the end if on `main` to let all main workflows run
@@ -50,11 +51,6 @@ jobs:
         key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
         restore-keys: |
           ${{ runner.os }}-node-
-
-    - name: Setup Node 16.x
-      uses: actions/setup-node@v2.4.1
-      with:
-        node-version: '16.x'
 
     - name: Get pip cache dir
       id: pip-cache
@@ -100,7 +96,7 @@ jobs:
       uses: kitek/decode-base64-into-file-action@1.0
       with:
         encoded-value: ${{ secrets.WIN_CODE_SIGN_CERT }}
-        destination-file: .\tad-blockchain-gui\win_code_sign_cert.p12
+        destination-file: .\win_code_sign_cert.p12
 
     # Create our own venv outside of the git directory JUST for getting the ACTUAL version so that install can't break it
     - name: Get version number
@@ -130,8 +126,8 @@ jobs:
     - name: Get latest madmax plotter
       run: |
         mkdir "$env:GITHUB_WORKSPACE\madmax"
-        Invoke-WebRequest https://github.com/Chia-Network/chia-plotter-madmax/releases/download/${{ steps.latest-madmax.outputs.result }}/chia_plot-${{ steps.latest-madmax.outputs.result }}.exe -OutFile "$env:GITHUB_WORKSPACE\madmax\tad_plot.exe"
-        Invoke-WebRequest https://github.com/Chia-Network/chia-plotter-madmax/releases/download/${{ steps.latest-madmax.outputs.result }}/chia_plot_k34-${{ steps.latest-madmax.outputs.result }}.exe -OutFile "$env:GITHUB_WORKSPACE\madmax\tad_plot_k34.exe"
+        Invoke-WebRequest https://github.com/Chia-Network/chia-plotter-madmax/releases/download/${{ steps.latest-madmax.outputs.result }}/chia_plot-${{ steps.latest-madmax.outputs.result }}.exe -OutFile "$env:GITHUB_WORKSPACE\madmax\chia_plot.exe"
+        Invoke-WebRequest https://github.com/Chia-Network/chia-plotter-madmax/releases/download/${{ steps.latest-madmax.outputs.result }}/chia_plot_k34-${{ steps.latest-madmax.outputs.result }}.exe -OutFile "$env:GITHUB_WORKSPACE\madmax\chia_plot_k34.exe"
 
       # Get the most recent release from bladebit
     - uses: actions/github-script@v6
@@ -159,18 +155,41 @@ jobs:
       run: |
         .\Install.ps1 -d
 
-    - name: Build Windows installer with build_scripts\build_windows.ps1
+    # - name: Prepare GUI cache
+    #   id: gui-ref
+    #   run: |
+    #     $gui_ref = git submodule status tad-blockchain-gui
+    #     $gui_ref = $gui_ref -replace "^ | tad-blockchain-gui.*$",""
+    #     echo $gui_ref
+    #     echo "::set-output name=GUI_REF::$gui_ref"
+    #     echo "Remove-Item -Recurse -Force .\tad-blockchain-gui"
+    #     Remove-Item -Recurse -Force .\tad-blockchain-gui
+
+    # - name: Cache GUI
+    #   uses: actions/cache@v3
+    #   id: cache-gui
+    #   with:
+    #     path: .\tad-blockchain-gui
+    #     key: ${{ runner.os }}-tad-blockchain-gui-${{ steps.gui-ref.outputs.GUI_REF }}
+
+    # - if: steps.cache-gui.outputs.cache-hit != 'true'
+    - name: Build GUI
+      continue-on-error: false
+      run: |
+        cd .\build_scripts
+        .\build_windows-1-gui.ps1
+
+    - name: Build Windows installer
       env:
         TAD_INSTALLER_VERSION: ${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}
-        WIN_CODE_SIGN_PASS: ${{ secrets.WIN_CODE_SIGN_PASS }}
         HAS_SECRET: ${{ steps.check_secrets.outputs.HAS_SIGNING_SECRET }}
+        CSC_KEY_PASSWORD: ${{ secrets.WIN_CODE_SIGN_PASS }}
       run: |
         $env:path="C:\Program` Files` (x86)\Microsoft` Visual` Studio\2019\Enterprise\SDK\ScopeCppSDK\vc15\VC\bin\;$env:path"
         $env:path="C:\Program` Files` (x86)\Windows` Kits\10\App` Certification` Kit;$env:path"
-        git -C .\tad-blockchain-gui status
         .\venv\Scripts\Activate.ps1
         cd .\build_scripts
-        .\build_windows.ps1
+        .\build_windows-2-installer.ps1
 
     - name: Upload Windows exe's to artifacts
       uses: actions/upload-artifact@v3
@@ -184,9 +203,90 @@ jobs:
         name: tad-installers-windows-exe-intel
         path: ${{ github.workspace }}\tad-blockchain-gui\release-builds\
 
+    - name: Install AWS CLI
+      if: steps.check_secrets.outputs.HAS_AWS_SECRET
+      run: |
+          msiexec.exe /i https://awscli.amazonaws.com/AWSCLIV2.msi
+
+    - name: Configure AWS Credentials
+      if: steps.check_secrets.outputs.HAS_AWS_SECRET
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.INSTALLER_UPLOAD_KEY }}
+        aws-secret-access-key: ${{ secrets.INSTALLER_UPLOAD_SECRET }}
+        aws-region: us-west-2
+
+    - name: Upload to s3
+      if: steps.check_secrets.outputs.HAS_AWS_SECRET
+      env:
+        TAD_INSTALLER_VERSION: ${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}
+      shell: bash
+      run: |
+        GIT_SHORT_HASH=$(echo "${GITHUB_SHA}" | cut -c1-8)
+        TAD_DEV_BUILD=${TAD_INSTALLER_VERSION}-$GIT_SHORT_HASH
+        echo ::set-output name=TAD_DEV_BUILD::${TAD_DEV_BUILD}
+        echo ${TAD_DEV_BUILD}
+        pwd
+        aws s3 cp tad-blockchain-gui/release-builds/windows-installer/TadSetup-${TAD_INSTALLER_VERSION}.exe s3://download.tad.farm/dev/TadSetup-${TAD_DEV_BUILD}.exe
+
     - name: Create Checksums
       env:
         TAD_INSTALLER_VERSION: ${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}
       run: |
          certutil.exe -hashfile ${{ github.workspace }}\tad-blockchain-gui\release-builds\windows-installer\TadSetup-${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}.exe SHA256 > ${{ github.workspace }}\tad-blockchain-gui\release-builds\windows-installer\TadSetup-${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}.exe.sha256
          ls ${{ github.workspace }}\tad-blockchain-gui\release-builds\windows-installer\
+
+    - name: Install py3createtorrent
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        pip3 install py3createtorrent
+
+    - name: Create torrent
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        py3createtorrent -f -t udp://tracker.opentrackr.org:1337/announce ${{ github.workspace }}\tad-blockchain-gui\release-builds\windows-installer\TadSetup-${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}.exe -o ${{ github.workspace }}\tad-blockchain-gui\release-builds\windows-installer\TadSetup-${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}.exe.torrent --webseed https://download.tad.farm/install/TadSetup-${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}.exe
+        ls
+
+    - name: Upload Dev Installer
+      if: steps.check_secrets.outputs.HAS_AWS_SECRET && github.ref == 'refs/heads/main'
+      env:
+        TAD_INSTALLER_VERSION: ${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}
+      run: |
+        aws s3 cp ${{ github.workspace }}\tad-blockchain-gui\release-builds\windows-installer\TadSetup-${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}.exe s3://download.tad.farm/latest-dev/TadSetup-latest-dev.exe
+        aws s3 cp ${{ github.workspace }}\tad-blockchain-gui\release-builds\windows-installer\TadSetup-${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}.exe.sha256 s3://download.tad.farm/latest-dev/TadSetup-latest-dev.exe.sha256
+
+    - name: Upload Release Files
+      if: steps.check_secrets.outputs.HAS_AWS_SECRET && startsWith(github.ref, 'refs/tags/')
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.INSTALLER_UPLOAD_KEY }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.INSTALLER_UPLOAD_SECRET }}
+      run: |
+        aws s3 cp ${{ github.workspace }}\tad-blockchain-gui\release-builds\windows-installer\TadSetup-${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}.exe s3://download.tad.farm/install/
+        aws s3 cp ${{ github.workspace }}\tad-blockchain-gui\release-builds\windows-installer\TadSetup-${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}.exe.sha256 s3://download.tad.farm/install/
+        aws s3 cp ${{ github.workspace }}\tad-blockchain-gui\release-builds\windows-installer\TadSetup-${{ steps.version_number.outputs.TAD_INSTALLER_VERSION }}.exe.torrent s3://download.tad.farm/torrents/
+
+    - name: Get tag name
+      if: startsWith(github.ref, 'refs/tags/')
+      id: tag-name
+      run: |
+        echo "::set-output name=TAG_NAME::$(echo ${{ github.ref }} | cut -d'/' -f 3)"
+        echo "::set-output name=REPO_NAME::$(echo ${{ github.repository }} | cut -d'/' -f 2)"
+
+    # - name: Mark installer complete
+    #   if: startsWith(github.ref, 'refs/tags/')
+    #   run: |
+    #     $headers = @{
+    #         Authorization="Bearer ${{ secrets.GLUE_ACCESS_TOKEN }}"
+    #     }
+    #     $data = @{
+    #         tad_ref='${{ steps.tag-name.outputs.TAG_NAME }}'
+    #     }
+    #     $json = $data | ConvertTo-Json
+    #     $response = Invoke-RestMethod '${{ secrets.GLUE_API_URL }}/api/v1/${{ steps.tag-name.outputs.REPO_NAME }}/${{ steps.tag-name.outputs.TAG_NAME }}/success/build-windows' -Method Post -Body $json -ContentType 'application/json' -Headers $headers
+
+    - name: Remove Windows exe and installer to exclude from cache
+      run: |
+        Remove-Item .\tad-blockchain-gui\packages\gui\dist -Recurse -Force
+        Remove-Item .\tad-blockchain-gui\packages\gui\daemon -Recurse -Force
+        Remove-Item .\tad-blockchain-gui\Tad-win32-x64 -Recurse -Force
+        Remove-Item .\tad-blockchain-gui\release-builds -Recurse -Force

@@ -1,7 +1,13 @@
 from typing import KeysView, Generator
 
 SERVICES_FOR_GROUP = {
-    "all": "tad_harvester tad_timelord_launcher tad_timelord tad_farmer tad_full_node tad_wallet".split(),
+    "all": (
+        "tad_harvester tad_timelord_launcher tad_timelord tad_farmer "
+        "tad_full_node tad_wallet tad_data_layer tad_data_layer_http"
+    ).split(),
+    # TODO: should this be `data_layer`?
+    "data": "tad_wallet tad_data_layer".split(),
+    "data_layer_http": "tad_data_layer_http".split(),
     "node": "tad_full_node".split(),
     "harvester": "tad_harvester".split(),
     "farmer": "tad_harvester tad_farmer tad_full_node tad_wallet".split(),

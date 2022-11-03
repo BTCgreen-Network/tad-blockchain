@@ -4,4 +4,3 @@
 set -e
 
 unlink /usr/bin/tad || true
-unlink /opt/tad || true

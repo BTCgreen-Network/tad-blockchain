@@ -2,7 +2,7 @@ from tad.util.ints import uint64
 
 from .constants import ConsensusConstants
 
-testnet_kwargs = {
+default_kwargs = {
     "SLOT_BLOCKS_TARGET": 32,
     "MIN_BLOCKS_PER_CHALLENGE_BLOCK": 16,  # Must be less than half of SLOT_BLOCKS_TARGET
     "MAX_SUB_SLOT_BLOCKS": 128,  # Must be less than half of SUB_EPOCH_BLOCKS
@@ -11,7 +11,7 @@ testnet_kwargs = {
     # DIFFICULTY_STARTING is the starting difficulty for the first epoch, which is then further
     # multiplied by another factor of DIFFICULTY_CONSTANT_FACTOR, to be used in the VDF iter calculation formula.
     "DIFFICULTY_CONSTANT_FACTOR": 2 ** 67,
-    "DIFFICULTY_STARTING": 2,
+    "DIFFICULTY_STARTING": 2, # Changed from Tad default of 7
     "DIFFICULTY_CHANGE_MAX_FACTOR": 3,  # The next difficulty is truncated to range [prev / FACTOR, prev * FACTOR]
     # These 3 constants must be changed at the same time
     "SUB_EPOCH_BLOCKS": 384,  # The number of blocks per sub-epoch, mainnet 384
@@ -50,12 +50,10 @@ testnet_kwargs = {
     "BLOCKS_CACHE_SIZE": 4608 + (128 * 4),
     "WEIGHT_PROOF_RECENT_BLOCKS": 1000,
     "MAX_BLOCK_COUNT_PER_REQUESTS": 32,  # Allow up to 32 blocks per request
-    "NETWORK_TYPE": 0,
     "MAX_GENERATOR_SIZE": 1000000,
     "MAX_GENERATOR_REF_LIST_SIZE": 512,  # Number of references allowed in the block generator ref list
     "POOL_SUB_SLOT_ITERS": 37600000000,  # iters limit * NUM_SPS
-    "SOFT_FORK_HEIGHT": 2300000,
 }
 
 
-DEFAULT_CONSTANTS = ConsensusConstants(**testnet_kwargs)  # type: ignore
+DEFAULT_CONSTANTS = ConsensusConstants(**default_kwargs)  # type: ignore

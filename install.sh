@@ -49,7 +49,7 @@ if [ "$(uname -m)" = "armv7l" ]; then
   echo "WARNING:"
   echo "The Tad Blockchain requires a 64 bit OS and this is 32 bit armv7l"
   echo "For more information, see"
-  echo "https://github.com/TadNetwork/tad-blockchain/wiki/Raspberry-Pi"
+  echo "https://github.com/Tad-Network/tad-blockchain/wiki/Raspberry-Pi"
   echo "Exiting."
   exit 1
 fi
@@ -299,11 +299,11 @@ python -m pip install -e ."${EXTRAS}" --extra-index-url https://pypi.chia.net/si
 
 echo ""
 echo "Tad blockchain install.sh complete."
-echo "For assistance join us on Keybase in the #support chat channel:"
-echo "https://keybase.io/team/tad_network.public"
+echo "For assistance join us on Discord in the #support chat channel:"
+echo "https://discord.gg/2whh7ygat9"
 echo ""
 echo "Try the Quick Start Guide to running tad-blockchain:"
-echo "https://github.com/TadNetwork/tad-blockchain/wiki/Quick-Start-Guide"
+echo "https://github.com/Tad-Network/tad-blockchain/wiki/Quick-Start-Guide"
 echo ""
 echo "To install the GUI type 'sh install-gui.sh' after '. ./activate'."
 echo ""

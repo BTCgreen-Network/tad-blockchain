@@ -1,9 +1,10 @@
 from typing import Optional
 
 import tad.server.ws_connection as ws
-from tad.full_node.full_node import full_node_protocol, wallet_protocol
+from tad.protocols import full_node_protocol, wallet_protocol
 from tad.seeder.crawler import Crawler
 from tad.server.outbound_message import Message
+from tad.server.server import TadServer
 from tad.util.api_decorators import api_request, peer_required
 
 
@@ -20,7 +21,8 @@ class CrawlerAPI:
         return invoke
 
     @property
-    def server(self):
+    def server(self) -> TadServer:
+        assert self.crawler.server is not None
         return self.crawler.server
 
     @property

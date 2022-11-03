@@ -1,6 +1,6 @@
 # @tad/api-react
 
-![Alt text](https://www.tad.net/img/tad_logo.svg)
+![Alt text](https://www.tad.farm/img/tad_logo.svg)
 
 This library provides react hooks on the top of @tad/api and uses [RTK Query](https://redux-toolkit.js.org/rtk-query/overview) under do hood.
 It is designed to simplify common cases for loading data in a web application, eliminating the need to hand-write data fetching & caching logic yourself. Providing much more benefits:

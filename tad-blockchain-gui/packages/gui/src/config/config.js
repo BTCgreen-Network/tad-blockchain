@@ -1,5 +1,5 @@
 export default {
   multipleWallets: process.env.MULTIPLE_WALLETS === 'true',
   local_test: process.env.LOCAL_TEST === 'true',
-  backup_host: 'https://backup.tad.net',
+  backup_host: 'https://backup.tad.farm',
 };

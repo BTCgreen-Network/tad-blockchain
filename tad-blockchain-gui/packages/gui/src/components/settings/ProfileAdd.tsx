@@ -1,7 +1,6 @@
 import React from 'react';
 import { Trans, t } from '@lingui/macro';
 import {
-  Button,
   ButtonLoading,
   tadToMojo,
   Fee,
@@ -20,10 +19,6 @@ import {
 } from '@tad/api-react';
 import { useForm } from 'react-hook-form';
 import { useNavigate } from 'react-router';
-import {
-  WalletType,
-  type Wallet,
- } from '@tad/api';
 import useOpenExternal from '../../hooks/useOpenExternal';
 import isNumeric from 'validator/es/lib/isNumeric';
 
@@ -52,14 +47,14 @@ export default function ProfileAdd() {
   });
 
   const [createProfile, { isLoading: isCreateProfileLoading }] = useCreateNewWalletMutation();
-  const { data: balance, isLoading: isLoadingWalletBalance } = useGetWalletBalanceQuery({
+  const { data: balance } = useGetWalletBalanceQuery({
     walletId: 1,
   });
   const navigate = useNavigate();
   const openExternal = useOpenExternal();
 
   function handleClick() {
-    openExternal('https://faucet.tad.net/');
+    openExternal('https://faucet.tad.farm/');
   }
 
   async function handleSubmit(data: CreateProfileData) {

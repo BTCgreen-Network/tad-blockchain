@@ -2,7 +2,7 @@ import React, { useMemo } from 'react';
 import type { NFTAttribute } from '@tad/api';
 import { Trans } from '@lingui/macro';
 import { Flex } from '@tad/core';
-import { styled, useTheme } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { Grid, Typography, LinearProgress } from '@mui/material';
 import isRankingAttribute from '../../util/isRankingAttribute';
 
@@ -29,7 +29,6 @@ export function NFTRanking(props: NFTRankingProps) {
     color = 'secondary',
     progressColor = 'primary',
   } = props;
-  const theme = useTheme();
   const { name, trait_type, value, min_value = 0, max_value } = attribute;
   const title = trait_type ?? name;
   const percentage = (value - min_value) / (max_value - min_value);
@@ -68,7 +67,10 @@ export default function NFTRankings(props: NFTRankingsProps) {
   const { attributes } = props;
 
   const rankingsAttributes = useMemo(() => {
-    return attributes?.filter(isRankingAttribute);
+    if (Array.isArray(attributes)) {
+      return attributes.filter(isRankingAttribute);
+    }
+    return [];
   }, [attributes]);
 
   if (!rankingsAttributes?.length) {

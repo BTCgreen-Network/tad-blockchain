@@ -71,7 +71,7 @@ const Spacer = styled.div`
   margin-bottom: 1rem;
 `;
 
-const url = 'https://tad.net';
+const url = 'https://tad.farm';
 
 type Props = {
   version: string;
