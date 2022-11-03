@@ -45,7 +45,7 @@ async function main(opts) {
 }
 
 const appName = 'Tad';
-const dmgIcon = '../tad-blockchain-gui/packages/gui/src/assets/img/tad.icns';
+const dmgIcon = '../tad-blockchain-gui/packages/gui/src/assets/img/Tad.icns';
 const dmgBackground = './assets/dmg/background.tiff';
 const outputDir = './final_installer';
 const appPath = process.argv[2]; // required

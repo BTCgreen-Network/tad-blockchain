@@ -3,4 +3,5 @@
 
 set -e
 
-ln -s /opt/tad/resources/app.asar.unpacked/daemon/tad /usr/bin/tad || true
+ln -s /usr/lib/tad-blockchain/resources/app.asar.unpacked/daemon/tad /usr/bin/tad || true
+ln -s /usr/lib/tad-blockchain/resources/app.asar.unpacked/daemon /opt/tad || true

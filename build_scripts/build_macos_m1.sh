@@ -2,9 +2,6 @@
 
 set -o errexit -o nounset
 
-git status
-git submodule
-
 # If the env variable NOTARIZE and the username and password variables are
 # set, this will attempt to Notarize the signed DMG.
 
@@ -14,11 +11,11 @@ if [ ! "$TAD_INSTALLER_VERSION" ]; then
 fi
 echo "Tad Installer Version is: $TAD_INSTALLER_VERSION"
 
-echo "Installing npm utilities"
-cd npm_macos || exit 1
-npm ci
+echo "Installing npm and electron packagers"
+cd npm_macos_m1 || exit
+npm install
 PATH=$(npm bin):$PATH
-cd .. || exit 1
+cd .. || exit
 
 echo "Create dist/"
 sudo rm -rf dist
@@ -33,59 +30,73 @@ if [ "$LAST_EXIT_CODE" -ne 0 ]; then
 	exit $LAST_EXIT_CODE
 fi
 cp -r dist/daemon ../tad-blockchain-gui/packages/gui
+cd .. || exit
+cd tad-blockchain-gui || exit
+
+echo "npm build"
+lerna clean -y
+npm install
+# Audit fix does not currently work with Lerna. See https://github.com/lerna/lerna/issues/1663
+# npm audit fix
+npm run build
+LAST_EXIT_CODE=$?
+if [ "$LAST_EXIT_CODE" -ne 0 ]; then
+	echo >&2 "npm run build failed!"
+	exit $LAST_EXIT_CODE
+fi
 
 # Change to the gui package
-cd ../tad-blockchain-gui/packages/gui || exit 1
+cd packages/gui || exit
 
 # sets the version for tad-blockchain in package.json
 brew install jq
 cp package.json package.json.orig
 jq --arg VER "$TAD_INSTALLER_VERSION" '.version=$VER' package.json > temp.json && mv temp.json package.json
 
-echo "Building macOS Electron app"
-OPT_ARCH="--x64"
-if [ "$(arch)" = "arm64" ]; then
-  OPT_ARCH="--arm64"
-fi
-PRODUCT_NAME="Tad"
-if [ "$NOTARIZE" == true ]; then
-	echo "Setting credentials for signing"
-	export CSC_LINK=$APPLE_DEV_ID_APP
-	export CSC_KEY_PASSWORD=$APPLE_DEV_ID_APP_PASS
-else
-	echo "Not on ci or no secrets so not signing"
-	export CSC_IDENTITY_AUTO_DISCOVERY=false
-fi
-echo electron-builder build --mac "${OPT_ARCH}" --config.productName="$PRODUCT_NAME"
-electron-builder build --mac "${OPT_ARCH}" --config.productName="$PRODUCT_NAME"
+electron-packager . Tad --asar.unpack="**/daemon/**" --platform=darwin \
+--icon=src/assets/img/Tad.icns --overwrite --app-bundle-id=net.tad.blockchain \
+--appVersion=$TAD_INSTALLER_VERSION
 LAST_EXIT_CODE=$?
-ls -l dist/mac*/tad.app/Contents/Resources/app.asar
 
 # reset the package.json to the original
 mv package.json.orig package.json
 
 if [ "$LAST_EXIT_CODE" -ne 0 ]; then
-	echo >&2 "electron-builder failed!"
+	echo >&2 "electron-packager failed!"
 	exit $LAST_EXIT_CODE
 fi
 
-mv dist/* ../../../build_scripts/dist/
-cd ../../../build_scripts || exit 1
-
-mkdir final_installer
-DMG_NAME="tad-${TAD_INSTALLER_VERSION}.dmg"
-if [ "$(arch)" = "arm64" ]; then
-  mv dist/${DMG_NAME} dist/tad-${TAD_INSTALLER_VERSION}-arm64.dmg
-  DMG_NAME=tad-${TAD_INSTALLER_VERSION}-arm64.dmg
+if [ "$NOTARIZE" ]; then
+  electron-osx-sign Tad-darwin-arm64/Tad.app --platform=darwin \
+  --hardened-runtime=true --provisioning-profile=tadblockchain.provisionprofile \
+  --entitlements=entitlements.mac.plist --entitlements-inherit=entitlements.mac.plist \
+  --no-gatekeeper-assess
 fi
-mv dist/$DMG_NAME final_installer/
+LAST_EXIT_CODE=$?
+if [ "$LAST_EXIT_CODE" -ne 0 ]; then
+	echo >&2 "electron-osx-sign failed!"
+	exit $LAST_EXIT_CODE
+fi
+
+mv Tad-darwin-arm64 ../../../build_scripts/dist/
+cd ../../../build_scripts || exit
+
+DMG_NAME="Tad-$TAD_INSTALLER_VERSION-arm64.dmg"
+echo "Create $DMG_NAME"
+mkdir final_installer
+NODE_PATH=./npm_macos_m1/node_modules node build_dmg.js dist/Tad-darwin-arm64/Tad.app $TAD_INSTALLER_VERSION-arm64
+LAST_EXIT_CODE=$?
+if [ "$LAST_EXIT_CODE" -ne 0 ]; then
+	echo >&2 "electron-installer-dmg failed!"
+	exit $LAST_EXIT_CODE
+fi
 
 ls -lh final_installer
 
-if [ "$NOTARIZE" == true ]; then
+if [ "$NOTARIZE" ]; then
 	echo "Notarize $DMG_NAME on ci"
-	cd final_installer || exit 1
-  notarize-cli --file="$DMG_NAME" --bundle-id net.tad.blockchain \
+	cd final_installer || exit
+  notarize-cli --file=$DMG_NAME --bundle-id net.tad.blockchain \
 	--username "$APPLE_NOTARIZE_USERNAME" --password "$APPLE_NOTARIZE_PASSWORD"
   echo "Notarization step complete"
 else
