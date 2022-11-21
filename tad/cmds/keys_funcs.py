@@ -26,7 +26,7 @@ from tad.wallet.derive_keys import (
     master_sk_to_wallet_sk,
     master_sk_to_wallet_sk_unhardened,
 )
-from tad.wallet.derive_chives_keys import chives_master_sk_to_farmer_sk, chives_master_sk_to_pool_sk
+from tad.wallet.derive_chives_keys import master_sk_to_chives_farmer_sk, master_sk_to_chives_pool_sk
 
 
 def unlock_keyring() -> None:
