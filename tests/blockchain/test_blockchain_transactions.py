@@ -11,7 +11,7 @@ from tad.types.spend_bundle import SpendBundle
 from tad.util.errors import ConsensusError, Err
 from tad.util.ints import uint64
 from tests.blockchain.blockchain_test_utils import _validate_and_add_block
-from tests.setup_nodes import test_constants
+from tad.simulator.block_tools import test_constants
 from tests.util.generator_tools_testing import run_and_get_removals_and_additions
 from tad.simulator.wallet_tools import WalletTool
 

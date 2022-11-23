@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import asyncio
 import dataclasses
 from typing import Any, AsyncIterator, Iterator, List
@@ -6,6 +8,7 @@ import pytest
 import pytest_asyncio
 
 from tad.data_layer.data_layer_wallet import DataLayerWallet, Mirror
+from tad.simulator.setup_nodes import SimulatorsAndWallets, setup_simulators_and_wallets
 from tad.simulator.simulator_protocol import FarmNewBlockProtocol
 from tad.simulator.time_out_assert import time_out_assert
 from tad.types.blockchain_format.coin import Coin
@@ -15,7 +18,6 @@ from tad.types.peer_info import PeerInfo
 from tad.util.ints import uint16, uint32, uint64
 from tad.wallet.db_wallet.db_wallet_puzzles import create_mirror_puzzle
 from tad.wallet.util.merkle_tree import MerkleTree
-from tests.setup_nodes import SimulatorsAndWallets, setup_simulators_and_wallets
 
 pytestmark = pytest.mark.data_layer
 
@@ -238,6 +240,9 @@ class TestDLWallet:
 
         await dl_wallet_1.stop_tracking_singleton(launcher_id)
         assert await dl_wallet_1.get_latest_singleton(launcher_id) is None
+
+        await dl_wallet_1.track_new_launcher_id(launcher_id, peer)
+        await time_out_assert(15, do_tips_match, True)
 
     @pytest.mark.parametrize(
         "trusted",

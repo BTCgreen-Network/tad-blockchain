@@ -1,12 +1,15 @@
-from typing import Any, Iterator, List, Tuple, Optional
+from __future__ import annotations
+
+from typing import Any, Iterator, List, Optional, Tuple
+
 from chiabip158 import PyBIP158
 
+from tad.consensus.cost_calculator import NPCResult
 from tad.types.blockchain_format.coin import Coin
 from tad.types.blockchain_format.sized_bytes import bytes32
 from tad.types.full_block import FullBlock
 from tad.types.header_block import HeaderBlock
 from tad.types.spend_bundle_conditions import SpendBundleConditions
-from tad.consensus.cost_calculator import NPCResult
 from tad.util.ints import uint64
 
 

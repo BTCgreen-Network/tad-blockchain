@@ -11,7 +11,7 @@ from clvm_tools import binutils
 from typing_extensions import Literal, get_args
 
 from tad.protocols.wallet_protocol import RespondRemovals
-from tad.simulator.block_tools import BlockTools
+from tad.simulator.block_tools import BlockTools, test_constants
 from tad.types.blockchain_format.coin import Coin
 from tad.types.blockchain_format.program import Program
 from tad.types.blockchain_format.sized_bytes import bytes4, bytes32
@@ -44,7 +44,6 @@ from tad.util.streamable import (
     streamable_from_dict,
     write_uint32,
 )
-from tests.setup_nodes import test_constants
 
 
 def test_int_not_supported() -> None:

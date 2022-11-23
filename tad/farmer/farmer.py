@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import asyncio
 import json
 import logging
@@ -9,7 +11,6 @@ from typing import Any, Callable, Dict, List, Optional, Set, Tuple
 import aiohttp
 from blspy import AugSchemeMPL, G1Element, G2Element, PrivateKey
 
-import tad.server.ws_connection as ws  # lgtm [py/import-and-import-from]
 from tad.consensus.constants import ConsensusConstants
 from tad.daemon.keychain_proxy import KeychainProxy, connect_to_keychain_and_validate, wrap_local_keychain
 from tad.plot_sync.delta import Delta
@@ -28,6 +29,7 @@ from tad.protocols.pool_protocol import (
     get_current_authentication_token,
 )
 from tad.protocols.protocol_message_types import ProtocolMessageTypes
+from tad.rpc.rpc_server import default_get_connections
 from tad.server.outbound_message import NodeType, make_msg
 from tad.server.server import ssl_context_for_root
 from tad.server.ws_connection import WSTadConnection
@@ -49,11 +51,10 @@ from tad.wallet.derive_keys import (
     match_address_to_sk,
 )
 from tad.wallet.derive_chives_keys import (
-    master_sk_to_chives_farmer_sk,
-    master_sk_to_chives_pool_sk,
-    master_sk_to_chives_wallet_sk,
-    find_chives_authentication_sk,
-    find_chives_owner_sk,
+    chives_find_authentication_sk,
+    chives_find_owner_sk,
+    chives_master_sk_to_farmer_sk,
+    chives_master_sk_to_pool_sk,
 )
 from tad.wallet.puzzles.singleton_top_layer import SINGLETON_MOD
 
@@ -121,6 +122,9 @@ class Farmer:
         # Last time we updated pool_state based on the config file
         self.last_config_access_time: uint64 = uint64(0)
 
+    def get_connections(self, request_node_type: Optional[NodeType]) -> List[Dict[str, Any]]:
+        return default_get_connections(server=self.server, request_node_type=request_node_type)
+
     async def ensure_keychain_proxy(self) -> KeychainProxy:
         if self.keychain_proxy is None:
             if self.local_keychain:
@@ -143,10 +147,9 @@ class Farmer:
             return False
 
         self._private_keys = [master_sk_to_farmer_sk(sk) for sk in self.all_root_sks] + [
-            master_sk_to_pool_sk(sk) for sk in self.all_root_sks
-        ]
-        self._private_keys = self._private_keys + [master_sk_to_chives_farmer_sk(sk) for sk in self.all_root_sks] + [
-            master_sk_to_chives_pool_sk(sk) for sk in self.all_root_sks
+            master_sk_to_pool_sk(sk) for sk in self.all_root_sks] + [
+            chives_master_sk_to_farmer_sk(sk) for sk in self.all_root_sks] + [
+            chives_master_sk_to_pool_sk(sk) for sk in self.all_root_sks] + [
         ]
 
         if len(self.get_public_keys()) == 0:
@@ -261,7 +264,7 @@ class Farmer:
             ErrorResponse(uint16(PoolErrorCode.REQUEST_FAILED.value), error_message).to_json_dict()
         )
 
-    def on_disconnect(self, connection: ws.WSTadConnection):
+    def on_disconnect(self, connection: WSTadConnection):
         self.log.info(f"peer disconnected {connection.get_peer_logging()}")
         self.state_changed("close_connection", {})
         if connection.connection_type is NodeType.HARVESTER:
@@ -425,10 +428,12 @@ class Farmer:
         if pool_config.p2_singleton_puzzle_hash in self.authentication_keys:
             return self.authentication_keys[pool_config.p2_singleton_puzzle_hash]
         auth_sk: Optional[PrivateKey] = find_authentication_sk(self.all_root_sks, pool_config.owner_public_key)
-        if auth_sk is None:
-            auth_sk = find_chives_authentication_sk(self.all_root_sks, pool_config.owner_public_key)
         if auth_sk is not None:
             self.authentication_keys[pool_config.p2_singleton_puzzle_hash] = auth_sk
+        else:
+            auth_sk: Optional[PrivateKey] = chives_find_authentication_sk(self.all_root_sks, pool_config.owner_public_key)
+            if auth_sk is not None:
+                self.authentication_keys[pool_config.p2_singleton_puzzle_hash] = auth_sk
         return auth_sk
 
     async def update_pool_state(self):
@@ -521,7 +526,7 @@ class Farmer:
                                 self.all_root_sks, pool_config.owner_public_key
                             )
                             if owner_sk_and_index is None:
-                                owner_sk_and_index = find_chives_owner_sk(
+                                owner_sk_and_index: Optional[Tuple[PrivateKey, uint32]] = chives_find_owner_sk(
                                     self.all_root_sks, pool_config.owner_public_key
                                 )
                             assert owner_sk_and_index is not None
@@ -548,6 +553,10 @@ class Farmer:
                             owner_sk_and_index: Optional[Tuple[PrivateKey, uint32]] = find_owner_sk(
                                 self.all_root_sks, pool_config.owner_public_key
                             )
+                            if owner_sk_and_index is None:
+                                owner_sk_and_index: Optional[Tuple[PrivateKey, uint32]] = chives_find_owner_sk(
+                                        self.all_root_sks, pool_config.owner_public_key
+                                    )
                             assert owner_sk_and_index is not None
                             await self._pool_put_farmer(
                                 pool_config, authentication_token_timeout, owner_sk_and_index[0]
@@ -575,12 +584,6 @@ class Farmer:
             search_addresses: List[bytes32] = [self.farmer_target, self.pool_target]
             for sk, _ in all_sks:
                 found_addresses: Set[bytes32] = match_address_to_sk(sk, search_addresses, max_ph_to_search)
-
-                if ph == self.farmer_target:
-                    stop_searching_for_farmer = True
-                if ph == self.pool_target:
-                    stop_searching_for_pool = True
-                ph = create_puzzlehash_for_pk(master_sk_to_chives_wallet_sk(sk, uint32(i)).get_g1())
 
                 if not have_farmer_sk and self.farmer_target in found_addresses:
                     search_addresses.remove(self.farmer_target)

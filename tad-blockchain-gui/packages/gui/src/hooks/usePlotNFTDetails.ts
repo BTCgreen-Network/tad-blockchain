@@ -1,6 +1,7 @@
-import { useMemo } from 'react';
 import type { PlotNFT, Plot } from '@tad/api';
 import { useIsWalletSynced } from '@tad/wallets';
+import { useMemo } from 'react';
+
 import PlotNFTState from '../constants/PlotNFTState';
 import usePlotNFTName from './usePlotNFTName';
 

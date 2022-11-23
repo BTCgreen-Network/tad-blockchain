@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List, Tuple
 
 from tad.full_node.mempool_check_conditions import get_name_puzzle_conditions

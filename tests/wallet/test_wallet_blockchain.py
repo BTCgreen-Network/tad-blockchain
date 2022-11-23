@@ -8,7 +8,7 @@ from tad.types.weight_proof import WeightProof
 from tad.util.generator_tools import get_block_header
 from tad.wallet.key_val_store import KeyValStore
 from tad.wallet.wallet_blockchain import WalletBlockchain
-from tests.setup_nodes import test_constants
+from tad.simulator.block_tools import test_constants
 from tests.util.db_connection import DBConnection
 
 

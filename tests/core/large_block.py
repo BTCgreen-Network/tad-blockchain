@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import zstd
 
 from tad.types.full_block import FullBlock

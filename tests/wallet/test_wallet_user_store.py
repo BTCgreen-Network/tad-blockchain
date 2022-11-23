@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import pytest
 
 from tad.wallet.util.wallet_types import WalletType

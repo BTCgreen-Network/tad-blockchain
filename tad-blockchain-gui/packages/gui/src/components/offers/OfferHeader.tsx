@@ -1,7 +1,7 @@
-import React from 'react';
-import { Trans } from '@lingui/macro';
 import { Flex, Link, useColorModeValue } from '@tad/core';
+import { Trans } from '@lingui/macro';
 import { Typography } from '@mui/material';
+import React from 'react';
 import styled from 'styled-components';
 
 /* ========================================================================== */
@@ -30,7 +30,7 @@ type OfferHeaderProps = {
 
 export default function OfferHeader(props: OfferHeaderProps) {
   const { isMyOffer, isInvalid, isComplete } = props;
-  let headerElement: React.ReactElement | undefined = undefined;
+  let headerElement: React.ReactElement | undefined;
 
   if (isMyOffer) {
     headerElement = (
@@ -47,10 +47,11 @@ export default function OfferHeader(props: OfferHeaderProps) {
           {'This offer is no longer valid. To understand why, click '}
           <Link
             target="_blank"
-            href="https://chialisp.com/docs/tutorials/offers_gui_tutorial/#taker-attempts-to-accept-an-invalid-offer"
+            href="https://tadlisp.com/docs/tutorials/offers_gui_tutorial/#taker-attempts-to-accept-an-invalid-offer"
           >
             here
-          </Link> to learn more.
+          </Link>{' '}
+          to learn more.
         </Trans>
       </Typography>
     );

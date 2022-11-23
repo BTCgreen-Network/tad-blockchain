@@ -1,51 +1,35 @@
+from __future__ import annotations
+
 from io import TextIOWrapper
+from typing import Optional
+
 import click
 
 from tad import __version__
 from tad.cmds.beta import beta_cmd
 from tad.cmds.configure import configure_cmd
-from tad.cmds.farm import farm_cmd
 from tad.cmds.data import data_cmd
+from tad.cmds.db import db_cmd
+from tad.cmds.farm import farm_cmd
 from tad.cmds.init import init_cmd
 from tad.cmds.keys import keys_cmd
 from tad.cmds.netspace import netspace_cmd
 from tad.cmds.passphrase import passphrase_cmd
 from tad.cmds.peer import peer_cmd
+from tad.cmds.plotnft import plotnft_cmd
 from tad.cmds.plots import plots_cmd
+from tad.cmds.plotters import plotters_cmd
 from tad.cmds.rpc import rpc_cmd
 from tad.cmds.show import show_cmd
 from tad.cmds.start import start_cmd
 from tad.cmds.stop import stop_cmd
 from tad.cmds.wallet import wallet_cmd
-from tad.cmds.plotnft import plotnft_cmd
-from tad.cmds.plotters import plotters_cmd
-from tad.cmds.db import db_cmd
 from tad.util.default_root import DEFAULT_KEYS_ROOT_PATH, DEFAULT_ROOT_PATH
 from tad.util.errors import KeychainCurrentPassphraseIsInvalid
-from tad.util.keychain import (
-    Keychain,
-    set_keys_root_path,
-)
+from tad.util.keychain import Keychain, set_keys_root_path
 from tad.util.ssl_check import check_ssl
-from typing import Optional
 
 CONTEXT_SETTINGS = dict(help_option_names=["-h", "--help"])
-
-
-def monkey_patch_click() -> None:
-    # this hacks around what seems to be an incompatibility between the python from `pyinstaller`
-    # and `click`
-    #
-    # Not 100% sure on the details, but it seems that `click` performs a check on start-up
-    # that `codecs.lookup(locale.getpreferredencoding()).name != 'ascii'`, and refuses to start
-    # if it's not. The python that comes with `pyinstaller` fails this check.
-    #
-    # This will probably cause problems with the command-line tools that use parameters that
-    # are not strict ascii. The real fix is likely with the `pyinstaller` python.
-
-    import click.core
-
-    click.core._verify_python3_env = lambda *args, **kwargs: 0  # type: ignore[attr-defined]
 
 
 @click.group(
@@ -83,8 +67,9 @@ def cli(
         set_keys_root_path(Path(keys_root_path))
 
     if passphrase_file is not None:
-        from tad.cmds.passphrase_funcs import cache_passphrase, read_passphrase_from_file
         from sys import exit
+
+        from tad.cmds.passphrase_funcs import cache_passphrase, read_passphrase_from_file
 
         try:
             passphrase = read_passphrase_from_file(passphrase_file)
@@ -120,6 +105,7 @@ def version_cmd() -> None:
 @click.pass_context
 def run_daemon_cmd(ctx: click.Context, wait_for_unlock: bool) -> None:
     import asyncio
+
     from tad.daemon.server import async_run_daemon
     from tad.util.keychain import Keychain
 
@@ -149,7 +135,6 @@ cli.add_command(beta_cmd)
 
 
 def main() -> None:
-    monkey_patch_click()
     cli()  # pylint: disable=no-value-for-parameter
 
 

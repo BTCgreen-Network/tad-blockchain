@@ -1,5 +1,6 @@
-from typing import Any, Dict, List, Optional
+from __future__ import annotations
 
+from typing import Any, Dict, List, Optional
 
 from tad.cmds.cmds_util import get_any_service_client
 from tad.cmds.units import units
@@ -7,8 +8,7 @@ from tad.consensus.block_record import BlockRecord
 from tad.rpc.farmer_rpc_client import FarmerRpcClient
 from tad.rpc.full_node_rpc_client import FullNodeRpcClient
 from tad.rpc.wallet_rpc_client import WalletRpcClient
-from tad.util.misc import format_bytes
-from tad.util.misc import format_minutes
+from tad.util.misc import format_bytes, format_minutes
 from tad.util.network import is_localhost
 
 SECONDS_PER_BLOCK = (24 * 3600) / 4608

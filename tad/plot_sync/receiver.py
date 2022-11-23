@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import logging
 import time
 from dataclasses import dataclass, field
@@ -25,7 +27,9 @@ from tad.protocols.harvester_protocol import (
     PlotSyncResponse,
     PlotSyncStart,
 )
-from tad.server.ws_connection import ProtocolMessageTypes, WSTadConnection, make_msg
+from tad.protocols.protocol_message_types import ProtocolMessageTypes
+from tad.server.outbound_message import make_msg
+from tad.server.ws_connection import WSTadConnection
 from tad.types.blockchain_format.sized_bytes import bytes32
 from tad.util.ints import int16, uint32, uint64
 from tad.util.misc import get_list_or_len

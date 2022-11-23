@@ -48,7 +48,6 @@ from tad.pools.pool_puzzles import (
 )
 
 from tad.util.ints import uint8, uint32, uint64, uint128
-from tad.wallet.derive_chives_keys import find_chives_owner_sk
 from tad.wallet.derive_keys import (
     find_owner_sk,
 )
@@ -425,7 +424,7 @@ class PoolWallet:
         (a `smart coin`). It contains an inner puzzle that can switch between
         paying block rewards to a pool, or to a user's own wallet.
 
-        Call under the wallet state manger lock
+        Call under the wallet state manager lock
         """
         amount = 1
         standard_wallet = main_wallet
@@ -487,10 +486,6 @@ class PoolWallet:
             self._owner_sk_and_index = find_owner_sk(
                 [self.wallet_state_manager.private_key], (await self.get_current_state()).current.owner_pubkey
             )
-        if self._owner_sk_and_index is None:
-            self._owner_sk_and_index = find_chives_owner_sk(
-                [self.wallet_state_manager.private_key], (await self.get_current_state()).current.owner_pubkey
-            )
         assert self._owner_sk_and_index is not None
         return self._owner_sk_and_index
 
@@ -500,8 +495,6 @@ class PoolWallet:
     async def sign(self, coin_spend: CoinSpend) -> SpendBundle:
         async def pk_to_sk(pk: G1Element) -> PrivateKey:
             s = find_owner_sk([self.wallet_state_manager.private_key], pk)
-            if s is None:
-                s = find_chives_owner_sk([self.wallet_state_manager.private_key], pk)
             if s is None:
                 return self.standard_wallet.secret_key_store.secret_key_for_public_key(pk)
             else:
@@ -998,6 +991,7 @@ class PoolWallet:
         exclude: Optional[List[Coin]] = None,
         min_coin_amount: Optional[uint64] = None,
         max_coin_amount: Optional[uint64] = None,
+        excluded_coin_amounts: Optional[List[uint64]] = None,
     ) -> Set[Coin]:
         raise RuntimeError("PoolWallet does not support select_coins()")
 

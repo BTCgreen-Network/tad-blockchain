@@ -12,7 +12,6 @@ outbound_rate_limit_percent: 30
 network_overrides: &network_overrides
   constants:
     mainnet:
-      NETWORK_TYPE: 0
       GENESIS_CHALLENGE: e6e94ecddf80277287f1c8c853165fb76f6b5a8ff55e098a398cba05ecbd5170
       GENESIS_PRE_FARM_POOL_PUZZLE_HASH: "f42ef80b591766f168f800172d86ce93cae7a7a5206cbfa52242c53a6312c4fa"
       GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: "f42ef80b591766f168f800172d86ce93cae7a7a5206cbfa52242c53a6312c4fa"
@@ -20,24 +19,24 @@ network_overrides: &network_overrides
       MIN_PLOT_SIZE: 18
       GENESIS_CHALLENGE: e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
       GENESIS_PRE_FARM_POOL_PUZZLE_HASH: "d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc"
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: "3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af"
+      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: "d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc"
     testnet2:
       MIN_PLOT_SIZE: 18
       GENESIS_CHALLENGE: ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad
       DIFFICULTY_CONSTANT_FACTOR: 10052721566054
       GENESIS_PRE_FARM_POOL_PUZZLE_HASH: "d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc"
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: "3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af"
+      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: "d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc"
     testnet3:
       DIFFICULTY_CONSTANT_FACTOR: 10052721566054
       GENESIS_CHALLENGE: ca7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015af
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: 3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af
+      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
       GENESIS_PRE_FARM_POOL_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
       MIN_PLOT_SIZE: 18
       MEMPOOL_BLOCK_BUFFER: 10
     testnet4:
       DIFFICULTY_CONSTANT_FACTOR: 10052721566054
       GENESIS_CHALLENGE: dd7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015af
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: 3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af
+      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
       GENESIS_PRE_FARM_POOL_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
       MIN_PLOT_SIZE: 18
       MEMPOOL_BLOCK_BUFFER: 10
@@ -46,7 +45,7 @@ network_overrides: &network_overrides
     testnet5:
       DIFFICULTY_CONSTANT_FACTOR: 10052721566054
       GENESIS_CHALLENGE: ee7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015af
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: 3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af
+      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
       GENESIS_PRE_FARM_POOL_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
       MIN_PLOT_SIZE: 18
       MEMPOOL_BLOCK_BUFFER: 10
@@ -55,18 +54,29 @@ network_overrides: &network_overrides
     testnet7:
       DIFFICULTY_CONSTANT_FACTOR: 10052721566054
       GENESIS_CHALLENGE: 117816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015af
-      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: 3d8765d3a597ec1d99663f6c9816d915b9f68613ac94009884c4addaefcce6af
+      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
       GENESIS_PRE_FARM_POOL_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
       MIN_PLOT_SIZE: 18
       MEMPOOL_BLOCK_BUFFER: 50
       EPOCH_BLOCKS: 768
       DIFFICULTY_STARTING: 30
+    testnet10:
+      AGG_SIG_ME_ADDITIONAL_DATA: ae83525ba8d1dd3f09b277de18ca3e43fc0af20d20c4b3e92ef2a48bd291ccb2
+      DIFFICULTY_CONSTANT_FACTOR: 10052721566054
+      DIFFICULTY_STARTING: 30
+      EPOCH_BLOCKS: 768
+      GENESIS_CHALLENGE: ae83525ba8d1dd3f09b277de18ca3e43fc0af20d20c4b3e92ef2a48bd291ccb2
+      GENESIS_PRE_FARM_FARMER_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
+      GENESIS_PRE_FARM_POOL_PUZZLE_HASH: d23da14695a188ae5708dd152263c4db883eb27edeb936178d4d988b8f3ce5fc
+      MEMPOOL_BLOCK_BUFFER: 10
+      MIN_PLOT_SIZE: 18
   config:
     mainnet:
       address_prefix: "tad"
       default_full_node_port: 4044
     testnet0:
       address_prefix: "ttad"
+      default_full_node_port: 54044
     testnet1:
       address_prefix: "ttad"
     testnet2:
@@ -77,10 +87,13 @@ network_overrides: &network_overrides
       address_prefix: "ttad"
     testnet7:
       address_prefix: "ttad"
-      default_full_node_port: 23333
+      default_full_node_port: 54044
+    testnet10:
+      address_prefix: "ttad"
+      default_full_node_port: 54044
 
 selected_network: &selected_network "mainnet"
-ALERTS_URL: https://tad.farm/notify/mainnet_alert.txt
+ALERTS_URL: https://download.tadcoins.com/notify/mainnet_alert.txt
 TAD_ALERTS_PUBKEY: 89b7fd87cb56e926ecefb879a29aae308be01f31980569f6a75a69d2a9a69daefd71fb778d865f7c50d6c967e3025937
 
 # public ssl ca is included in source code
@@ -99,7 +112,7 @@ daemon_ssl:
   private_key: "config/ssl/daemon/private_daemon.key"
 
 
-# Controls logging of all servers (harvester, farmer, etc..). Each one can be overriden.
+# Controls logging of all servers (harvester, farmer, etc..). Each one can be overridden.
 logging: &logging
   log_stdout: False  # If True, outputs to stdout instead of a file
   log_filename: "log/debug.log"
@@ -114,7 +127,7 @@ logging: &logging
 seeder:
   # The fake full node used for crawling will run on this port.
   port: 4044
-  # Most full nodes on the network run on this port. (i.e. 8444 for mainnet, 58444 for testnet).
+  # Most full nodes on the network run on this port. (i.e. 4044 for mainnet, 54044 for testnet).
   other_peers_port: 4044
   # This will override the default full_node.peer_connect_timeout for the crawler full node
   peer_connect_timeout: 2
@@ -158,7 +171,7 @@ harvester:
   # If True, starts an RPC server at the following port
   start_rpc_server: True
   rpc_port: 4458
-  num_threads: 10
+  num_threads: 30
   plots_refresh_parameter:
     interval_seconds: 120 # The interval in seconds to refresh the plot file manager
     retry_invalid_seconds: 1200 # How long to wait before re-trying plots which failed to load
@@ -266,7 +279,7 @@ timelord:
   # fast_algorithm is a faster proof generation algorithm. This speed increase
   # requires much less memory usage and a does not have the risk of OOM that
   # the normal timelord has but requires significantly more cores doing
-  # parrallel proof generation and creates a larger and slower to verify
+  # parallel proof generation and creates a larger and slower to verify
   # resulting proof.
   # An Intel Core i9-10900K can run 2 normal vdf_clients at ~221,000 ips
   # without slowing down but running more than 1 with fast_algorithm will
@@ -289,7 +302,7 @@ timelord:
   multiprocessing_start_method: default
 
   start_rpc_server: True
-  rpc_port: 8657
+  rpc_port: 8557
 
   ssl:
     private_crt:  "config/ssl/timelord/private_timelord.crt"
@@ -401,8 +414,8 @@ full_node:
       host: *self_hostname
       port: 4446
   introducer_peer:
-      host: introducer.tadcoins.com  # Tad introducer IPv4/IPv6
-      port: 4045
+      host: introducer.tadcoins.com  # Tad AWS introducer IPv4/IPv6
+      port: 4044
   wallet_peer:
     host: *self_hostname
     port: 4449
@@ -499,15 +512,15 @@ wallet:
   network_overrides: *network_overrides
   selected_network: *selected_network
 
-  target_peer_count: 5
+  target_peer_count: 3
   peer_connect_interval: 60
   # The introducer will only return peers who it has seen in the last
   # recent_peer_threshold seconds
   recent_peer_threshold: 6000
 
   introducer_peer:
-    host: introducer.tadcoins.com # Tad introducer IPv4/IPv6
-    port: 4045
+    host: introducer.tadcoins.com # Tad AWS introducer IPv4/IPv6
+    port: 4044
 
   ssl:
     private_crt:  "config/ssl/wallet/private_wallet.crt"
@@ -530,7 +543,7 @@ wallet:
 
   # if an unknown CAT belonging to us is seen, a wallet will be automatically created
   # the user accepts the risk/responsibility of verifying the authenticity and origin of unknown CATs
-  automatically_add_unknown_cats: True
+  automatically_add_unknown_cats: False
 
   # Interval to resend unconfirmed transactions, even if previously accepted into Mempool
   tx_resend_timeout_secs: 1800
@@ -597,5 +610,5 @@ simulator:
   plot_directory: simulator/plots
 
   # Should we use real time in the simulated chain?
-  # most tests don't need this, however it is pretty important when writing ChiaLisp
+  # most tests don't need this, however it is pretty important when writing TadLisp
   use_current_time: True

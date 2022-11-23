@@ -1,4 +1,4 @@
-import { useLocalStorage } from '@tad/core';
+import { useLocalStorage } from '@tad/api-react';
 
 export default function useEnableFilePropagationServer() {
   return useLocalStorage<boolean>('enableFilePropagationServer', false);

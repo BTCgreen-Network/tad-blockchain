@@ -1,7 +1,7 @@
-import React from 'react';
-import { Trans } from '@lingui/macro';
-import { FormatLargeNumber, CardSimple } from '@tad/core';
 import { useGetBlockchainStateQuery } from '@tad/api-react';
+import { FormatLargeNumber, CardSimple } from '@tad/core';
+import { Trans } from '@lingui/macro';
+import React from 'react';
 
 export default function FullNodeCardDifficulty() {
   const { data, isLoading, error } = useGetBlockchainStateQuery();

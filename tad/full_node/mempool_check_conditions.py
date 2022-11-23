@@ -13,21 +13,18 @@ from tad.util.errors import Err
 from tad.util.ints import uint32, uint64, uint16
 from tad.wallet.puzzles.rom_bootstrap_generator import get_generator
 from tad.types.blockchain_format.program import SerializedProgram
-from tad.wallet.puzzles.load_clvm import load_serialized_clvm
+from tad.wallet.puzzles.load_clvm import load_serialized_clvm_maybe_recompile
 from tad.consensus.default_constants import DEFAULT_CONSTANTS
 
 from tad.types.blockchain_format.program import Program
 
 GENERATOR_MOD = get_generator()
 
-DESERIALIZE_MOD = load_serialized_clvm("chialisp_deserialisation.clvm", package_or_requirement="tad.wallet.puzzles")
+DESERIALIZE_MOD = load_serialized_clvm_maybe_recompile(
+    "tadlisp_deserialisation.clvm", package_or_requirement="tad.wallet.puzzles"
+)
 
 log = logging.getLogger(__name__)
-
-
-def unwrap(x: Optional[uint32]) -> uint32:
-    assert x is not None
-    return x
 
 
 def get_name_puzzle_conditions(

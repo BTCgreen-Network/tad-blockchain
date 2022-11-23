@@ -30,8 +30,8 @@ tad-blockchain.tar.gz.tar.gz
 # PyInstaller
 #  Usually these files are written by a python script from a template
 #  before PyInstaller builds the exe, so as to inject date/other infos into it.
-# *.manifest
-# *.spec
+*.manifest
+*.spec
 build_scripts/*.dmg
 build_scripts/build
 
@@ -60,10 +60,6 @@ activate
 
 # mypy
 .mypy_cache/
-
-# Editors
-.vscode
-.idea
 
 # Packaging
 tad-blockchain.tar.gz
@@ -95,5 +91,10 @@ packages/**/src/locales/**/*.js
 daemon/
 win_code_sign_cert.p12
 
+# testing
+packages/**/playwright-report/index.html
+
 .env
 dist
+**/coverage
+

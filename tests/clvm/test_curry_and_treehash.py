@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from tad.types.blockchain_format.program import Program
 from tad.wallet.puzzles import p2_delegated_puzzle_or_hidden_puzzle  # import (puzzle_for_pk, puzzle_hash_for_pk, MOD)
 from tad.wallet.util.curry_and_treehash import calculate_hash_of_quoted_mod_hash, curry_and_treehash

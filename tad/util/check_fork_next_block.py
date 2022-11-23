@@ -1,4 +1,6 @@
-from typing import List, Callable
+from __future__ import annotations
+
+from typing import Callable, List
 
 from tad.consensus.blockchain_interface import BlockchainInterface
 from tad.util.ints import uint32

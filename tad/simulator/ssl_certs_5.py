@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Dict, Tuple
 
 SSL_TEST_PRIVATE_CA_CRT = b"""-----BEGIN CERTIFICATE-----
@@ -639,7 +641,7 @@ VFhfB/a/ZcMEb6vELgpnSzOMZFg6AA89PWBEip/2U1Yf6ugqjsU9xlKkXVnzoS/p
 o0PlWbVTsKoj5N/rQH0VcIYwtIQqS4rbpsgAjhihA5oAS8ZKl484pAwf2adXdSdR
 5vn+FP7y17oRt6ttQPITApKpZSIcxNuQlLNI95c49oU53tAvXZdddb0arjoqJtw1
 GkTlHj08whgxpTd4S80GGOn3GROekcJHVnjSA4A3AoGBAOSCiI4w0AxW/0WewwjT
-+Sik2bzu4s33NSeO6jkLq1LEhtn0l6TAD67ffdvkgqYpxK6R2u8dJimdrrz29EbT
++Sik2bzu4s33NSeO6jkLq1LEhtn0l6XMZ67ffdvkgqYpxK6R2u8dJimdrrz29EbT
 IEOCtbScjA07HrJ8iEpe6IqggqdqWTtxWNsh33yLZ7ee78Wcn1innEDvzxE9/Otg
 fPCKq+y287rvbgS6c4l5vbABAoGBAJ0EOHggaZM2SFACEa4Li7z/oszSTeuH5elU
 sgqjjI1lN+NvtVNV3uf7+rGAmK8owHuhu0jXdDtCdU/Z1J/LZcmFAKE9R1mtyhaI

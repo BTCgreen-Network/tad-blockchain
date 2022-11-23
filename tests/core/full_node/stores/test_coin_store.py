@@ -18,7 +18,7 @@ from tad.util.hash import std_hash
 from tad.util.ints import uint64, uint32
 from tests.blockchain.blockchain_test_utils import _validate_and_add_block
 from tad.simulator.wallet_tools import WalletTool
-from tests.setup_nodes import test_constants
+from tad.simulator.block_tools import test_constants
 from tad.types.blockchain_format.sized_bytes import bytes32
 from tests.util.db_connection import DBConnection
 

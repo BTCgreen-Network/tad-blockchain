@@ -1,5 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
 import importlib
+import os
 import pathlib
 import platform
 import sysconfig
@@ -19,7 +20,7 @@ def solve_name_collision_problem(analysis):
     There is a collision between the `tad` file name (which is the executable)
     and the `tad` directory, which contains non-code resources like `english.txt`.
     We move all the resources in the zipped area so there is no
-    need to create the `chia` directory, since the names collide.
+    need to create the `tad` directory, since the names collide.
 
     Fetching data now requires going into a zip file, so it will be slower.
     It's best if files that are used frequently are cached.
@@ -72,18 +73,25 @@ hiddenimports = []
 hiddenimports.extend(entry_points)
 hiddenimports.extend(keyring_imports)
 
-binaries = [
-    (
-        f"{ROOT}/madmax/tad_plot",
-        "madmax"
-    ),
-    (
-        f"{ROOT}/madmax/tad_plot_k34",
-        "madmax"
-    )
-]
+binaries = []
 
-if not THIS_IS_MAC:
+if os.path.exists(f"{ROOT}/madmax/tad_plot"):
+    binaries.extend([
+        (
+            f"{ROOT}/madmax/tad_plot",
+            "madmax"
+        )
+    ])
+
+if os.path.exists(f"{ROOT}/madmax/tad_plot_k34",):
+    binaries.extend([
+        (
+            f"{ROOT}/madmax/tad_plot_k34",
+            "madmax"
+        )
+    ])
+
+if os.path.exists(f"{ROOT}/bladebit/bladebit"):
     binaries.extend([
         (
             f"{ROOT}/bladebit/bladebit",

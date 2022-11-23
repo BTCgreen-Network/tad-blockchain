@@ -13,17 +13,17 @@ from tad.types.blockchain_format.program import Program, SerializedProgram
 
 from tad.types.blockchain_format.sized_bytes import bytes32
 from tad.types.coin_spend import CoinSpend
-from tad.wallet.puzzles.load_clvm import load_clvm
+from tad.wallet.puzzles.load_clvm import load_clvm_maybe_recompile
 from tad.wallet.puzzles.singleton_top_layer import puzzle_for_singleton
 
 from tad.util.ints import uint32, uint64
 
 log = logging.getLogger(__name__)
 # "Full" is the outer singleton, with the inner puzzle filled in
-SINGLETON_MOD = load_clvm("singleton_top_layer.clvm")
-POOL_WAITING_ROOM_MOD = load_clvm("pool_waitingroom_innerpuz.clvm")
-POOL_MEMBER_MOD = load_clvm("pool_member_innerpuz.clvm")
-P2_SINGLETON_MOD = load_clvm("p2_singleton_or_delayed_puzhash.clvm")
+SINGLETON_MOD = load_clvm_maybe_recompile("singleton_top_layer.clvm")
+POOL_WAITING_ROOM_MOD = load_clvm_maybe_recompile("pool_waitingroom_innerpuz.clvm")
+POOL_MEMBER_MOD = load_clvm_maybe_recompile("pool_member_innerpuz.clvm")
+P2_SINGLETON_MOD = load_clvm_maybe_recompile("p2_singleton_or_delayed_puzhash.clvm")
 POOL_OUTER_MOD = SINGLETON_MOD
 
 POOL_MEMBER_HASH = POOL_MEMBER_MOD.get_tree_hash()
@@ -388,7 +388,7 @@ def solution_to_pool_state(full_spend: CoinSpend) -> Optional[PoolState]:
         if inner_solution.rest().first().as_int() != 0:
             return None
 
-        # This is referred to as p1 in the chialisp code
+        # This is referred to as p1 in the tadlisp code
         # spend_type is absorbing money if p1 is a cons box, spend_type is escape if p1 is an atom
         # TODO: The comment above, and in the CLVM, seems wrong
         extra_data = inner_solution.first()

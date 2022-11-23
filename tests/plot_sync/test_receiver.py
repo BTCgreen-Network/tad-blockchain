@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import dataclasses
 import logging
 import random
@@ -20,7 +22,7 @@ from tad.protocols.harvester_protocol import (
     PlotSyncResponse,
     PlotSyncStart,
 )
-from tad.server.ws_connection import NodeType
+from tad.server.outbound_message import NodeType
 from tad.types.blockchain_format.sized_bytes import bytes32
 from tad.util.ints import uint8, uint32, uint64
 from tad.util.misc import get_list_or_len

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import click
 
 
@@ -33,11 +35,13 @@ def init_cmd(ctx: click.Context, create_certs: str, fix_ssl_permissions: bool, t
     - Run `tad init -c [directory]` on your remote harvester,
       where [directory] is the the copy of your Farming Machine CA directory
     - Get more details on remote harvester on Tad wiki:
-      https://github.com/Tad-Network/tad-blockchain/wiki/Farming-on-many-machines
+      https://github.com/BTCgreen-Network/tad-blockchain/wiki/Farming-on-many-machines
     """
     from pathlib import Path
-    from .init_funcs import init
+
     from tad.cmds.passphrase_funcs import initialize_passphrase
+
+    from .init_funcs import init
 
     set_passphrase = kwargs.get("set_passphrase")
     if set_passphrase:
@@ -53,7 +57,8 @@ def init_cmd(ctx: click.Context, create_certs: str, fix_ssl_permissions: bool, t
 
 
 if __name__ == "__main__":
-    from .init_funcs import tad_init
     from tad.util.default_root import DEFAULT_ROOT_PATH
+
+    from .init_funcs import tad_init
 
     tad_init(DEFAULT_ROOT_PATH)

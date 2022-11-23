@@ -1,8 +1,10 @@
+from __future__ import annotations
+
 from typing import Any
 
 from tad.plot_sync.util import ErrorCodes, State
 from tad.protocols.harvester_protocol import PlotSyncIdentifier
-from tad.server.ws_connection import NodeType
+from tad.server.outbound_message import NodeType
 from tad.util.ints import uint64
 
 

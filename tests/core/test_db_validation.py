@@ -1,10 +1,11 @@
+from __future__ import annotations
+
 import random
 import sqlite3
 from contextlib import closing
 from pathlib import Path
 from typing import List
 
-import aiosqlite
 import pytest
 
 from tad.cmds.db_validate_func import validate_v2
@@ -13,11 +14,11 @@ from tad.consensus.default_constants import DEFAULT_CONSTANTS
 from tad.consensus.multiprocess_validation import PreValidationResult
 from tad.full_node.block_store import BlockStore
 from tad.full_node.coin_store import CoinStore
+from tad.simulator.block_tools import test_constants
 from tad.types.blockchain_format.sized_bytes import bytes32
 from tad.types.full_block import FullBlock
 from tad.util.db_wrapper import DBWrapper2
 from tad.util.ints import uint64
-from tests.setup_nodes import test_constants
 from tests.util.temp_file import TempFile
 
 
@@ -128,10 +129,8 @@ def test_db_validate_in_main_chain(invalid_in_chain: bool) -> None:
 
 
 async def make_db(db_file: Path, blocks: List[FullBlock]) -> None:
-    db_wrapper = DBWrapper2(await aiosqlite.connect(db_file), 2)
+    db_wrapper = await DBWrapper2.create(database=db_file, reader_count=1, db_version=2)
     try:
-        await db_wrapper.add_connection(await aiosqlite.connect(db_file))
-
         async with db_wrapper.writer_maybe_transaction() as conn:
             # this is done by tad init normally
             await conn.execute("CREATE TABLE database_version(version int)")

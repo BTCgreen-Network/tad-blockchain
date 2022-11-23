@@ -1,13 +1,16 @@
+from __future__ import annotations
+
 import time
 from dataclasses import dataclass
 from secrets import token_bytes
 from typing import Optional
 
-from tad.harvester.harvester_api import Harvester
+from tad.farmer.farmer import Farmer
+from tad.harvester.harvester import Harvester
 from tad.plot_sync.sender import Sender
 from tad.protocols.harvester_protocol import PlotSyncIdentifier
+from tad.server.outbound_message import Message, NodeType
 from tad.server.start_service import Service
-from tad.server.ws_connection import Message, NodeType
 from tad.simulator.time_out_assert import time_out_assert
 from tad.types.blockchain_format.sized_bytes import bytes32
 from tad.types.peer_info import PeerInfo
@@ -34,7 +37,7 @@ def plot_sync_identifier(current_sync_id: uint64, message_id: uint64) -> PlotSyn
     return PlotSyncIdentifier(uint64(int(time.time())), current_sync_id, message_id)
 
 
-async def start_harvester_service(harvester_service: Service, farmer_service: Service) -> Harvester:
+async def start_harvester_service(harvester_service: Service[Harvester], farmer_service: Service[Farmer]) -> Harvester:
     # Set the `last_refresh_time` of the plot manager to avoid initial plot loading
     harvester: Harvester = harvester_service._node
     harvester.plot_manager.last_refresh_time = time.time()

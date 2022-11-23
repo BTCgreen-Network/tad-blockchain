@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import Dict, List, Optional, Tuple
 
 from clvm.casts import int_from_bytes
@@ -7,9 +9,9 @@ from tad.types.blockchain_format.program import Program, SerializedProgram
 from tad.types.blockchain_format.sized_bytes import bytes32, bytes48
 from tad.types.condition_opcodes import ConditionOpcode
 from tad.types.condition_with_args import ConditionWithArgs
+from tad.types.spend_bundle_conditions import SpendBundleConditions
 from tad.util.errors import ConsensusError, Err
 from tad.util.ints import uint64
-from tad.types.spend_bundle_conditions import SpendBundleConditions
 
 # TODO: review each `assert` and consider replacing with explicit checks
 #       since asserts can be stripped with python `-OO` flag
@@ -19,7 +21,7 @@ def parse_sexp_to_condition(
     sexp: Program,
 ) -> Tuple[Optional[Err], Optional[ConditionWithArgs]]:
     """
-    Takes a ChiaLisp sexp and returns a ConditionWithArgs.
+    Takes a TadLisp sexp and returns a ConditionWithArgs.
     If it fails, returns an Error
     """
     as_atoms = sexp.as_atom_list()
@@ -34,7 +36,7 @@ def parse_sexp_to_conditions(
     sexp: Program,
 ) -> Tuple[Optional[Err], Optional[List[ConditionWithArgs]]]:
     """
-    Takes a ChiaLisp sexp (list) and returns the list of ConditionWithArgss
+    Takes a TadLisp sexp (list) and returns the list of ConditionWithArgss
     If it fails, returns as Error
     """
     results: List[ConditionWithArgs] = []

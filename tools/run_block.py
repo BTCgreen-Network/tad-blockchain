@@ -35,6 +35,8 @@ associated with the coin being spent. Condition Opcodes are verified by every cl
 and in this way they control whether a spend is valid or not.
 
 """
+from __future__ import annotations
+
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -55,10 +57,12 @@ from tad.util.config import load_config
 from tad.util.default_root import DEFAULT_ROOT_PATH
 from tad.util.ints import uint32, uint64
 from tad.wallet.cat_wallet.cat_utils import match_cat_puzzle
-from tad.wallet.puzzles.load_clvm import load_serialized_clvm
+from tad.wallet.puzzles.load_clvm import load_serialized_clvm_maybe_recompile
 from tad.wallet.uncurried_puzzle import uncurry_puzzle
 
-DESERIALIZE_MOD = load_serialized_clvm("chialisp_deserialisation.clvm", package_or_requirement="tad.wallet.puzzles")
+DESERIALIZE_MOD = load_serialized_clvm_maybe_recompile(
+    "tadlisp_deserialisation.clvm", package_or_requirement="tad.wallet.puzzles"
+)
 
 
 @dataclass

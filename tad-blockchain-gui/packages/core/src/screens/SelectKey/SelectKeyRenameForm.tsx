@@ -1,9 +1,10 @@
-import React from 'react';
 import type { KeyData } from '@tad/api';
 import { useDeleteLabelMutation, useSetLabelMutation } from '@tad/api-react';
 import { Trans } from '@lingui/macro';
-import { useForm } from 'react-hook-form';
 import { ButtonGroup, Chip, InputAdornment } from '@mui/material';
+import React from 'react';
+import { useForm } from 'react-hook-form';
+
 import ButtonLoading from '../../components/ButtonLoading';
 import Flex from '../../components/Flex';
 import Form from '../../components/Form';
@@ -25,7 +26,7 @@ export default function SelectKeyRenameForm(props: SelectKeyRenameFormProps) {
   const [setLabel] = useSetLabelMutation();
   const methods = useForm<FormData>({
     defaultValues: {
-      label: keyData.label,
+      label: keyData.label || '',
     },
   });
 
@@ -38,10 +39,17 @@ export default function SelectKeyRenameForm(props: SelectKeyRenameFormProps) {
     }
 
     const { label } = values;
-    if (label) {
+    const newLabel = label.trim();
+
+    if (keyData.label === newLabel) {
+      onClose?.();
+      return;
+    }
+
+    if (newLabel) {
       await setLabel({
         fingerprint,
-        label,
+        label: newLabel,
       }).unwrap();
     } else {
       await deleteLabel({
@@ -73,16 +81,14 @@ export default function SelectKeyRenameForm(props: SelectKeyRenameFormProps) {
           disabled={!canSubmit}
           data-testid="SelectKeyRenameForm-label"
           onKeyDown={handleKeyDown}
+          inputProps={{
+            maxLength: 64,
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
                 <Tooltip title={<Trans>Cancel</Trans>}>
-                  <Chip
-                    size="small"
-                    aria-label="cancel"
-                    label={<Trans>Esc</Trans>}
-                    onClick={handleCancel}
-                  />
+                  <Chip size="small" aria-label="cancel" label={<Trans>Esc</Trans>} onClick={handleCancel} />
                 </Tooltip>
               </InputAdornment>
             ),

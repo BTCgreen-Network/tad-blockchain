@@ -7,12 +7,12 @@ from typing import Optional, Type, TypeVar
 from tad.types.blockchain_format.program import Program
 from tad.types.blockchain_format.sized_bytes import bytes32
 from tad.util.ints import uint16
-from tad.wallet.puzzles.load_clvm import load_clvm
+from tad.wallet.puzzles.load_clvm import load_clvm_maybe_recompile
 
 log = logging.getLogger(__name__)
-SINGLETON_TOP_LAYER_MOD = load_clvm("singleton_top_layer_v1_1.clvm")
-NFT_MOD = load_clvm("nft_state_layer.clvm")
-NFT_OWNERSHIP_LAYER = load_clvm("nft_ownership_layer.clvm")
+SINGLETON_TOP_LAYER_MOD = load_clvm_maybe_recompile("singleton_top_layer_v1_1.clvm")
+NFT_MOD = load_clvm_maybe_recompile("nft_state_layer.clvm")
+NFT_OWNERSHIP_LAYER = load_clvm_maybe_recompile("nft_ownership_layer.clvm")
 
 _T_UncurriedNFT = TypeVar("_T_UncurriedNFT", bound="UncurriedNFT")
 
@@ -22,7 +22,7 @@ class UncurriedNFT:
     """
     A simple solution for uncurry NFT puzzle.
     Initial the class with a full NFT puzzle, it will do a deep uncurry.
-    This is the only place you need to change after modified the Chialisp curried parameters.
+    This is the only place you need to change after modified the Tadlisp curried parameters.
     """
 
     nft_mod_hash: bytes32

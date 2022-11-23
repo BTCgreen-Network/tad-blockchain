@@ -1,6 +1,5 @@
+import { useGetLoggedInFingerprintQuery, useLocalStorage } from '@tad/api-react';
 import { useCallback } from 'react';
-import { useLocalStorage } from '@tad/core';
-import { useGetLoggedInFingerprintQuery } from '@tad/api-react';
 
 export default function useHiddenWallet(): {
   hide: (walletId: number) => void;

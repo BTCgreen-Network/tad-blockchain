@@ -1,7 +1,8 @@
-import React from 'react';
-import { Trans } from '@lingui/macro';
 import { Button, Flex, CardStep, useCurrencyCode } from '@tad/core';
+import { Trans } from '@lingui/macro';
 import { Box, Typography } from '@mui/material';
+import React from 'react';
+
 import useOpenExternal from '../../../hooks/useOpenExternal';
 
 type Props = {
@@ -15,7 +16,7 @@ export default function PlotNFTSelectFaucet(props: Props) {
   const openExternal = useOpenExternal();
 
   function handleClick() {
-    openExternal('https://faucet.tad.farm/');
+    openExternal('https://faucet.tadcoins.com/');
   }
 
   return (

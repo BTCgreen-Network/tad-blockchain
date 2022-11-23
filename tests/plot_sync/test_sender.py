@@ -1,10 +1,13 @@
+from __future__ import annotations
+
 import pytest
 
 from tad.plot_sync.exceptions import AlreadyStartedError, InvalidConnectionTypeError
 from tad.plot_sync.sender import ExpectedResponse, Sender
 from tad.plot_sync.util import Constants
 from tad.protocols.harvester_protocol import PlotSyncIdentifier, PlotSyncResponse
-from tad.server.ws_connection import NodeType, ProtocolMessageTypes
+from tad.protocols.protocol_message_types import ProtocolMessageTypes
+from tad.server.outbound_message import NodeType
 from tad.simulator.block_tools import BlockTools
 from tad.util.ints import int16, uint64
 from tests.plot_sync.util import get_dummy_connection, plot_sync_identifier

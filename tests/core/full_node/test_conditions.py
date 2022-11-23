@@ -24,7 +24,7 @@ from tad.types.spend_bundle import SpendBundle
 from tad.util.errors import Err
 from tad.util.ints import uint32
 from tad.simulator.block_tools import BlockTools
-from tests.util.keyring import TempKeyring
+from tad.simulator.keyring import TempKeyring
 
 from .ram_db import create_ram_blockchain
 from ...blockchain.blockchain_test_utils import _validate_and_add_block

@@ -1,7 +1,7 @@
-import React, { useMemo } from 'react';
-import { Trans } from '@lingui/macro';
-import { useCurrencyCode, mojoToTadLocaleString, CardSimple, useLocale } from '@tad/core';
 import { useGetFarmedAmountQuery } from '@tad/api-react';
+import { useCurrencyCode, mojoToTadLocaleString, CardSimple, useLocale } from '@tad/core';
+import { Trans } from '@lingui/macro';
+import React, { useMemo } from 'react';
 
 export default function FarmCardUserFees() {
   const currencyCode = useCurrencyCode();

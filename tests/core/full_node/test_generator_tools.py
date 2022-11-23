@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from typing import List
 
 from tad.types.blockchain_format.coin import Coin

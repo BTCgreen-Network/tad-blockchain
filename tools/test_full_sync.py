@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from __future__ import annotations
+
 import asyncio
 import cProfile
 import logging
@@ -15,12 +17,12 @@ import aiosqlite
 import click
 import zstd
 
-import tad.server.ws_connection as ws
 from tad.cmds.init_funcs import tad_init
 from tad.consensus.default_constants import DEFAULT_CONSTANTS
 from tad.full_node.full_node import FullNode
 from tad.protocols import full_node_protocol
 from tad.server.outbound_message import Message, NodeType
+from tad.server.ws_connection import WSTadConnection
 from tad.simulator.block_tools import make_unfinished_block
 from tad.types.blockchain_format.sized_bytes import bytes32
 from tad.types.full_block import FullBlock
@@ -69,7 +71,9 @@ class FakeServer:
     async def get_peer_info(self) -> Optional[PeerInfo]:
         return None
 
-    def get_full_node_outgoing_connections(self) -> List[ws.WSTadConnection]:
+    def get_connections(
+        self, node_type: Optional[NodeType] = None, *, outbound: Optional[bool] = False
+    ) -> List[WSTadConnection]:
         return []
 
     def is_duplicate_or_self_connection(self, target_node: PeerInfo) -> bool:
@@ -155,7 +159,7 @@ async def run_sync_test(
             else:
                 height = 0
 
-            peer: ws.WSTadConnection = FakePeer()  # type: ignore[assignment]
+            peer: WSTadConnection = FakePeer()  # type: ignore[assignment]
 
             print()
             counter = 0
@@ -353,7 +357,7 @@ async def run_sync_checkpoint(
         full_node.set_server(FakeServer())  # type: ignore[arg-type]
         await full_node._start()
 
-        peer: ws.WSTadConnection = FakePeer()  # type: ignore[assignment]
+        peer: WSTadConnection = FakePeer()  # type: ignore[assignment]
 
         print()
         height = 0
